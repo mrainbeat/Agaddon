@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/TopBar.jsx'
 import ForecastCard from '../components/ForecastCard.jsx'
 import SpendingBar from '../components/SpendingBar.jsx'
-import { loadData, rollPaydayIfPassed, getDDay, getNextSubscription } from '../lib/store.js'
+import { loadData, rollPaydayIfPassed, touchStreak, getDDay, getNextSubscription } from '../lib/store.js'
 
 function Home() {
+  const navigate = useNavigate()
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    const initial = rollPaydayIfPassed(loadData())
-    setData(initial)
+    // 접속할 때마다: 월급일 롤오버 -> 오늘 접속 스트릭 반영, 순서대로 적용
+    const withPayday = rollPaydayIfPassed(loadData())
+    const withStreak = touchStreak(withPayday)
+    setData(withStreak)
   }, [])
 
   if (!data) return null
@@ -20,18 +24,24 @@ function Home() {
     ? { ...nextSubRaw, daysLeft: getDDay(nextSubRaw.nextDate) }
     : null
 
+  const { spentAmount, maxAmount } = data.budget
+  const isBudgetTight = maxAmount > 0 && spentAmount / maxAmount >= 0.85
+  const isPaymentSoon = nextSub != null && nextSub.daysLeft <= 3
+  const hasAlert = isBudgetTight || isPaymentSoon
+
   return (
     <div className="screen">
       <section className="forecast-card">
         <TopBar
           streakDays={data.profile.streakDays}
           streakMax={data.profile.streakMax}
-          onBellClick={() => window.alert('알림 화면은 아직 준비 중이야!')}
+          hasAlert={hasAlert}
+          onBellClick={() => navigate('/notifications')}
         />
-        <ForecastCard dDay={dDay} nextSub={nextSub} />
+        <ForecastCard dDay={dDay} nextSub={nextSub} onHeadingClick={() => navigate('/notifications')} />
       </section>
 
-      <SpendingBar spentAmount={data.budget.spentAmount} maxAmount={data.budget.maxAmount} />
+      <SpendingBar spentAmount={spentAmount} maxAmount={maxAmount} />
     </div>
   )
 }

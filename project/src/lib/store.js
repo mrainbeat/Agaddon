@@ -5,13 +5,13 @@
 
 const STORAGE_KEY = 'tungjangi:data:v1'
 
-function addDays(date, days) {
+export function addDays(date, days) {
   const d = new Date(date)
   d.setDate(d.getDate() + days)
   return d
 }
 
-function toISODate(date) {
+export function toISODate(date) {
   const d = new Date(date)
   d.setHours(0, 0, 0, 0)
   return d.toISOString().slice(0, 10)
@@ -23,8 +23,9 @@ function createDefaultData() {
   return {
     profile: {
       nickname: '기명',
-      streakDays: 6, // 8칸 중 몇 칸 채울지
+      streakDays: 6, // 8칸 중 몇 칸 채울지 (오늘 접속분 포함, touchStreak가 관리)
       streakMax: 8,
+      lastActiveDate: toISODate(today), // 시딩 시점을 "오늘 접속"으로 간주
     },
     budget: {
       // 이번 달 쓸 수 있는 최대 금액과, 지금까지 쓴 금액
@@ -94,13 +95,53 @@ export function getDDay(isoDate) {
 
 // 정기결제 중 가장 임박한 결제 하나를 찾는다 (지난 결제는 제외)
 export function getNextSubscription(subscriptions) {
+  return getUpcomingSubscriptions(subscriptions)[0] ?? null
+}
+
+// 지나지 않은 정기결제를 결제일이 빠른 순으로 전부 반환
+export function getUpcomingSubscriptions(subscriptions) {
   const today = toISODate(new Date())
-  const upcoming = subscriptions
+  return subscriptions
     .filter((s) => s.nextDate >= today)
     .sort((a, b) => a.nextDate.localeCompare(b.nextDate))
-  return upcoming[0] ?? null
+}
+
+// 앱을 켤 때마다 호출: 연속 접속(스트릭)을 오늘 날짜 기준으로 갱신한다.
+// - 오늘 이미 반영했으면 그대로
+// - 어제까지 접속했으면 +1 (최대 streakMax)
+// - 하루 이상 건너뛰었으면 1로 초기화
+export function touchStreak(data) {
+  const today = toISODate(new Date())
+  const { lastActiveDate, streakDays, streakMax } = data.profile
+
+  if (lastActiveDate === today) return data
+
+  const yesterday = toISODate(addDays(new Date(), -1))
+  const nextStreak = lastActiveDate === yesterday ? Math.min(streakDays + 1, streakMax) : 1
+
+  const next = {
+    ...data,
+    profile: { ...data.profile, streakDays: nextStreak, lastActiveDate: today },
+  }
+  saveData(next)
+  return next
+}
+
+// 플랜 세우기 화면에서 저장: 이번 플랜의 종료일(월급날 or 직접입력)과 예산 총액을 갱신한다
+export function saveBudgetPlan(data, { periodEnd, maxAmount }) {
+  const next = {
+    ...data,
+    budget: { ...data.budget, nextPayday: periodEnd, maxAmount },
+  }
+  saveData(next)
+  return next
 }
 
 export function formatWon(amount) {
   return `${amount.toLocaleString('ko-KR')}원`
+}
+
+export function formatDateKo(isoDate) {
+  const d = new Date(isoDate)
+  return d.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })
 }
