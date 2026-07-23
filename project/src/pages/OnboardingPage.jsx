@@ -20,7 +20,7 @@ export default function OnboardingPage() {
         {/* 시작하기 버튼 */}
         <button
           onClick={() => navigate("/login")}
-          className="mt-16 w-full rounded-xl bg-[#FF7051] py-4 text-center text-lg font-bold text-white transition-transform active:scale-[0.98]"
+          className="mt-16 w-full rounded-xl bg-[#FF795B] py-4 text-center text-lg font-bold text-white transition-transform active:scale-[0.98]"
         >
           시작하기
         </button>

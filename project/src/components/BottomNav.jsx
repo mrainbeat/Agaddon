@@ -9,7 +9,7 @@ import myColor from "../assets/my_color.png";
 import myGray from "../assets/my_gray.png";
 
 const TABS = [
-  { to: "/", label: "홈", color: homeColor, gray: homeGray },
+  { to: "/home", label: "홈", color: homeColor, gray: homeGray },
   { to: "/friends", label: "친구", color: friendColor, gray: friendGray },
   { to: "/records", label: "기록", color: recordColor, gray: recordGray },
   { to: "/my", label: "마이", color: myColor, gray: myGray },
