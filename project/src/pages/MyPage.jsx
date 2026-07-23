@@ -64,7 +64,7 @@ export default function MyPage() {
         {/* 그룹 1 */}
         <div className="py-2">
           {section1.map((title, idx) =>
-            // "생활비 설정"만 우리가 만든 플랜세우기(/plan)로 연결
+            // "생활비 설정" 항목만 플랜세우기(/plan)로 연결
             title === "생활비 설정" ? (
               <Link key={idx} to="/plan" className={rowClass}>
                 <Row title={title} />

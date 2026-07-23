@@ -5,6 +5,7 @@ import Records from './pages/Records.jsx'
 import MyPage from './pages/MyPage.jsx'
 import Notifications from './pages/Notifications.jsx'
 import PlanSetup from './pages/PlanSetup.jsx'
+import SpendEntry from './pages/SpendEntry.jsx'
 import BottomNav from './components/BottomNav.jsx'
 
 function Layout() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/my" element={<MyPage />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/plan" element={<PlanSetup />} />
+        <Route path="/spend" element={<SpendEntry />} />
       </Route>
     </Routes>
   )

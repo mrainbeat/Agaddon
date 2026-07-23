@@ -1,9 +1,5 @@
 import Character from './Character.jsx'
-import { formatWon } from '../lib/store.js'
-
-// "하루 생존 마지노선"으로 쓸 기준 스낵: 삼각김밥 2개
-const SURVIVAL_ITEM_LABEL = '삼각김밥 2개'
-const SURVIVAL_DAILY_AMOUNT = 3200
+import { formatWon, SURVIVAL_ITEM_LABEL, SURVIVAL_DAILY_AMOUNT } from '../lib/store.js'
 
 // 오늘의 소비예보 메시지 우선순위
 // 1. 오늘 결제되는 정기결제가 있으면 그것부터 알림 (가장 확실하고 급한 정보)

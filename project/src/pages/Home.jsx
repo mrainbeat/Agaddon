@@ -40,7 +40,7 @@ function Home() {
       />
       <ForecastHeading dDay={dDay} onClick={() => navigate('/notifications')} />
       <ForecastCard nextSub={nextSub} budget={{ spentAmount, maxAmount, daysLeft: dDay }} />
-      <SpendingBar spentAmount={spentAmount} maxAmount={maxAmount} />
+      <SpendingBar spentAmount={spentAmount} maxAmount={maxAmount} onAddClick={() => navigate('/spend')} />
     </div>
   )
 }

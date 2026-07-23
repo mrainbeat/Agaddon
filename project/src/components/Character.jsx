@@ -1,8 +1,7 @@
-// 텅장이 마스코트 캐릭터
-// 실제 일러스트 파일이 아직 없어서 인라인 SVG로 대체했습니다.
-// 나중에 디자인팀 캐릭터 이미지(PNG/SVG)가 나오면 이 컴포넌트 내부만
-// <img src="..."/> 로 교체하면 되고, 사용하는 쪽(ForecastCard 등) 코드는 그대로 둬도 됩니다.
-function Character({ mood = "worried", size = 120 }) {
+// 텅장이 마스코트 캐릭터. 일러스트 파일이 없어 인라인 SVG로 대체.
+// 디자인 이미지(PNG/SVG)가 추가되면 이 컴포넌트 내부만 <img> 태그로 교체.
+// ForecastCard 등 사용하는 쪽 코드는 변경 불필요.
+function Character({ mood = 'worried', size = 120 }) {
   return (
     <svg
       width={size}
@@ -14,7 +13,10 @@ function Character({ mood = "worried", size = 120 }) {
       <circle cx="60" cy="62" r="46" fill="#E9E9EE" />
 
       {/* 몸통 / 후드티 */}
-      <path d="M28 108c1-20 12-32 32-32s31 12 32 32z" fill="#8CA0C9" />
+      <path
+        d="M28 108c1-20 12-32 32-32s31 12 32 32z"
+        fill="#8CA0C9"
+      />
       <path
         d="M28 108c1-20 12-32 32-32s31 12 32 32"
         fill="none"
@@ -39,20 +41,8 @@ function Character({ mood = "worried", size = 120 }) {
       />
 
       {/* 눈썹 (걱정스러운 표정) */}
-      <path
-        d="M44 49c3-3 8-4 11-2"
-        fill="none"
-        stroke="#4A2F1C"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M65 47c3-2 8-1 11 2"
-        fill="none"
-        stroke="#4A2F1C"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
+      <path d="M44 49c3-3 8-4 11-2" fill="none" stroke="#4A2F1C" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M65 47c3-2 8-1 11 2" fill="none" stroke="#4A2F1C" strokeWidth="2.5" strokeLinecap="round" />
 
       {/* 눈 (살짝 아래를 보는 걱정스러운 눈) */}
       <circle cx="49" cy="59" r="3.4" fill="#2B2233" />
@@ -66,16 +56,10 @@ function Character({ mood = "worried", size = 120 }) {
       <circle cx="78" cy="65" r="4" fill="#FFB6A0" opacity="0.6" />
 
       {/* 손 (걱정스럽게 뺨 쪽으로 든 손) */}
-      <path
-        d="M80 98c2-14 6-26 13-34"
-        fill="none"
-        stroke="#6C82AD"
-        strokeWidth="10"
-        strokeLinecap="round"
-      />
+      <path d="M80 98c2-14 6-26 13-34" fill="none" stroke="#6C82AD" strokeWidth="10" strokeLinecap="round" />
       <circle cx="94" cy="63" r="8" fill="#FFDCB8" />
     </svg>
-  );
+  )
 }
 
-export default Character;
+export default Character

@@ -137,6 +137,34 @@ export function saveBudgetPlan(data, { periodEnd, maxAmount }) {
   return next
 }
 
+// "하루 생존 마지노선"으로 쓰는 기준 스낵: 삼각김밥 2개. 소비예보/소비입력 화면에서 공용으로 사용.
+export const SURVIVAL_ITEM_LABEL = '삼각김밥 2개'
+export const SURVIVAL_DAILY_AMOUNT = 3200
+
+// 소비 내역 한 건 추가: spentAmount를 늘리고 history 맨 앞에 기록을 남긴다.
+export function addExpense(data, { merchant, amount }) {
+  const entry = {
+    id: `exp-${Date.now()}`,
+    merchant,
+    amount,
+    date: toISODate(new Date()),
+  }
+  const next = {
+    ...data,
+    budget: { ...data.budget, spentAmount: data.budget.spentAmount + amount },
+    history: [entry, ...data.history],
+  }
+  saveData(next)
+  return next
+}
+
+// 남은 예산을 남은 일수로 나눈 "하루에 쓸 수 있는 금액". 음수가 될 수도 있음(예산 초과).
+export function getDailyAvailable(budget) {
+  const remaining = budget.maxAmount - budget.spentAmount
+  const daysLeft = Math.max(getDDay(budget.nextPayday), 1)
+  return Math.round(remaining / daysLeft)
+}
+
 export function formatWon(amount) {
   return `${amount.toLocaleString('ko-KR')}원`
 }

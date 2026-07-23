@@ -1,7 +1,8 @@
 import { formatWon } from '../lib/store.js'
 
-// 소비 내역 게이지: 이번 달 예산 대비 지출 현황
-function SpendingBar({ spentAmount, maxAmount }) {
+// 소비 내역 게이지: 이번 달 예산 대비 지출 현황.
+// onAddClick을 넘기면 우측에 "입력" 버튼이 뜨고(홈 화면용), 안 넘기면 게이지만 표시(미리보기용).
+function SpendingBar({ spentAmount, maxAmount, onAddClick }) {
   const ratio = maxAmount > 0 ? Math.min(spentAmount / maxAmount, 1) : 0
   const percent = Math.round(ratio * 100)
   const isOver = spentAmount > maxAmount
@@ -11,7 +12,17 @@ function SpendingBar({ spentAmount, maxAmount }) {
     <section className="flex flex-col gap-2.5" aria-label="소비 내역">
       <div className="flex items-baseline justify-between">
         <h2 className="text-base font-bold">소비 내역</h2>
-        <span className={`text-[13px] font-bold ${isOver ? 'text-danger' : 'text-ink-muted'}`}>{percent}%</span>
+        {onAddClick ? (
+          <button
+            type="button"
+            className="rounded-full bg-line-soft px-3 py-1 text-[13px] font-bold text-ink"
+            onClick={onAddClick}
+          >
+            입력
+          </button>
+        ) : (
+          <span className={`text-[13px] font-bold ${isOver ? 'text-danger' : 'text-ink-muted'}`}>{percent}%</span>
+        )}
       </div>
 
       <div
