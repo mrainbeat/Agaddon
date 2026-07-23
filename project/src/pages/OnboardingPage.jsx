@@ -1,40 +1,42 @@
 import { useNavigate } from "react-router-dom";
-import characterImg from "../assets/character.png";
+import Logo from "../assets/Logo.svg"; // 로고 이미지
+import characterImg from "../assets/character.png"; // 하단 캐릭터 이미지 (경로/파일명 확인해주세요!)
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
 
   return (
-    // 전체 컨테이너를 화면 높이(h-dvh)에 딱 맞추고 스크롤 방지(overflow-hidden)
-    <div className="relative mx-auto flex h-dvh w-full max-w-[430px] flex-col bg-white px-6 pt-16 sm:pt-24 overflow-hidden">
-      {/* 1. 상단 텍스트 영역 (크기 고정) */}
-      <div className="shrink-0 flex flex-col items-center text-center">
-        <h1 className="text-5xl font-black tracking-tight text-black">
-          텅장이
-        </h1>
-        <p className="mt-3 text-lg font-medium text-gray-700">
-          너는 사고 싶고, 나는 살고 싶어
-        </p>
-      </div>
+    /* h-dvh와 overflow-hidden으로 스크롤 방지 및 한 화면 고정 */
+    <div className="font-['RiaSans'] mx-auto flex h-dvh w-full max-w-[430px] flex-col items-center overflow-hidden bg-white px-6">
+      {/* 1. 상단 여백 (화면 비율에 맞춰 자동 조절) */}
+      <div className="flex-[0.8] w-full"></div>
 
-      {/* 2. 시작하기 버튼 영역 (크기 고정, 캐릭터 위로 띄움) */}
-      <div className="mt-10 w-full shrink-0 z-10">
+      {/* 2. 메인 콘텐츠 (로고 + 텍스트 + 버튼) */}
+      <div className="flex w-full flex-col z-10">
+        {/* 로고 & 서브타이틀 (우측 정렬 느낌을 살리기 위해 items-end 사용) */}
+        <div className="flex flex-col items-end self-center">
+          <img src={Logo} alt="텅장이 로고" className="w-56 object-contain" />
+        </div>
+
+        {/* 시작하기 버튼 */}
         <button
-          type="button"
           onClick={() => navigate("/login")}
-          className="w-full rounded-2xl bg-[#FF7051] py-4 text-center text-lg font-bold text-white shadow-sm transition-transform active:scale-[0.98]"
+          className="mt-16 w-full rounded-xl bg-[#FF7051] py-4 text-center text-lg font-bold text-white transition-transform active:scale-[0.98]"
         >
           시작하기
         </button>
       </div>
 
-      {/* 3. 하단 캐릭터 영역 (남는 공간 모두 차지, 화면 크기에 맞춰 비율 자동 조절) */}
-      <div className="flex w-full flex-1 items-end justify-center min-h-0 mt-2">
+      {/* 3. 중간 여백 (버튼과 캐릭터 사이 공간 유연하게 확보) */}
+      <div className="w-full h-6"></div>
+
+      {/* 4. 하단 캐릭터 (화면 바닥에 밀착 및 살짝 잘리는 연출) */}
+      <div className="w-full flex justify-center mt-auto pointer-events-none">
         <img
           src={characterImg}
-          alt="텅장이 캐릭터"
-          // 너비 한계를 풀고(w-[130%]), 높이는 남은 공간에 꽉 차게(h-full) 설정하여 캐릭터를 키움
-          className="w-[130%] max-w-[400px] h-full object-contain object-bottom"
+          alt="온보딩 캐릭터"
+          /* translate-y-4를 주어 원본 사진처럼 밑부분이 자연스럽게 화면 밖으로 잘리게 연출 */
+          className="w-11/12 max-w-[320px] object-cover translate-y-4"
         />
       </div>
     </div>
