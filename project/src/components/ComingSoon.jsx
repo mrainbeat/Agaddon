@@ -1,10 +1,10 @@
 // 아직 디자인/기능이 정해지지 않은 화면을 위한 자리표시자
 function ComingSoon({ title, description }) {
   return (
-    <div className="screen coming-soon">
-      <div className="coming-soon-badge">준비 중</div>
-      <h1>{title}</h1>
-      <p>{description}</p>
+    <div className="flex flex-1 flex-col items-center gap-3 px-5 pb-2 pt-24 text-center">
+      <div className="inline-flex rounded-full bg-accent-soft px-3 py-1 text-xs font-bold text-accent">준비 중</div>
+      <h1 className="text-xl font-bold">{title}</h1>
+      <p className="max-w-[280px] text-sm leading-relaxed text-ink-muted">{description}</p>
     </div>
   )
 }
