@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logincharacterImg from "../assets/logincharacter.png"; // 이미지 위치에 따라 경로 확인
+import arrowIcon from "../assets/arrow.svg";
 
-// 환경변수에서 API 베이스 URL 불러오기
-const BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://api.hyeonseong-babo.store";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,7 +12,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // 1️⃣ 일반 로그인 처리 (POST /api/v1/auth/login)
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -49,7 +47,6 @@ export default function LoginPage() {
     }
   };
 
-  // 2️⃣ 카카오 로그인 처리 (Redirect)
   const handleKakaoLogin = () => {
     // 백엔드의 카카오 OAuth2 인증 주소로 페이지 전체 이동
     window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
