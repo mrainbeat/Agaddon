@@ -25,6 +25,11 @@
   body {
     margin: 0;
     padding: 0;
+    width: 100%;
+    /* 모바일 브라우저 주소창 및 안전 영역 대응을 위해 100% 및 overflow 고정 */
+    height: 100%;
+    overflow-x: hidden;
+    background-color: var(--color-page);
   }
 
   body {
@@ -37,13 +42,20 @@
     color-scheme: light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* 모바일에서 당겨서 새로고침되는 바운스 현상 방지 */
+    overscroll-behavior-y: none;
   }
 
   #root {
     width: 100%;
+    max-width: 430px; /* 모바일 뷰 최대 너비 고정 */
     min-height: 100svh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    background-color: var(--color-surface);
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   }
 
   button {

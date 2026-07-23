@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Logo from "../assets/Logo.svg"; // 로고 이미지
+import Logo from "../assets/Logo2.svg"; // 로고 이미지
 import characterImg from "../assets/character.png"; // 하단 캐릭터 이미지 (경로/파일명 확인해주세요!)
 
 export default function OnboardingPage() {
