@@ -1,97 +1,183 @@
-import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import logincharacterImg from "../assets/logincharacter.png"; // 이미지 위치에 따라 경로 확인
+
+// 환경변수에서 API 베이스 URL 불러오기
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://api.hyeonseong-babo.store";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
+  // 폼 입력값 상태 관리
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // 1️⃣ 일반 로그인 처리 (POST /api/v1/auth/login)
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.status === 200) {
+        // 로그인 성공 시 발급받은 JWT 토큰 저장
+        localStorage.setItem("accessToken", result.data.accessToken);
+
+        // 홈 화면으로 이동
+        navigate("/home", { replace: true });
+      } else {
+        alert(
+          result.message ||
+            "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
+        );
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("서버와 통신 중 오류가 발생했습니다.");
+    }
+  };
+
+  // 2️⃣ 카카오 로그인 처리 (Redirect)
+  const handleKakaoLogin = () => {
+    // 백엔드의 카카오 OAuth2 인증 주소로 페이지 전체 이동
+    window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
+  };
+
   return (
-    <div className="w-full max-w-[430px] bg-white mx-auto min-h-screen relative border-x border-gray-100 flex flex-col">
-      {/* 1. 상단 헤더 (뒤로가기 & 타이틀) */}
-      <header className="px-5 pt-12 pb-6">
-        <button className="mb-6 hover:opacity-70 transition-opacity">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="black"
-            strokeWidth="2.5"
+    <div className="relative mx-auto flex h-dvh w-full max-w-[430px] flex-col overflow-y-auto overflow-x-hidden bg-white px-6 pt-12 pb-6">
+      {/* 뒤로가기 버튼 */}
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-8 w-fit p-1"
+        aria-label="뒤로가기"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={3}
+          stroke="currentColor"
+          className="h-6 w-6"
+        >
+          <path
             strokeLinecap="round"
             strokeLinejoin="round"
-          >
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
-        <h1 className="text-[22px] font-bold text-black tracking-tight">
-          로그인
-        </h1>
-      </header>
+            d="M15.75 19.5L8.25 12l7.5-7.5"
+          />
+        </svg>
+      </button>
 
-      {/* 2. 메인 폼 영역 */}
-      <main className="px-5 flex-1 flex flex-col">
+      {/* 헤더 타이틀 */}
+      <div className="mb-10">
+        <h1 className="text-3xl font-black text-gray-900">만나서 반가워요!</h1>
+        <h2 className="mt-6 text-xl font-bold text-gray-800">로그인</h2>
+      </div>
+
+      {/* 일반 로그인 폼 */}
+      <form onSubmit={handleLogin} className="flex w-full flex-col">
         {/* 이메일 입력 */}
-        <div className="mb-8">
-          <label className="block text-[15px] font-bold text-black mb-3">
+        <div className="mb-6 flex flex-col">
+          <label
+            className="mb-2 text-sm font-bold text-gray-800"
+            htmlFor="email"
+          >
             이메일
           </label>
           <input
+            id="email"
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="이메일을 입력해주세요."
-            className="w-full pb-3 border-b border-[#e5e5e5] text-[15px] placeholder-[#b3b3b3] focus:outline-none focus:border-black transition-colors"
+            required
+            className="border-b border-gray-200 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:border-gray-800 focus:outline-none"
           />
         </div>
 
         {/* 비밀번호 입력 */}
-        <div className="mb-10">
-          <label className="block text-[15px] font-bold text-black mb-3">
+        <div className="mb-10 flex flex-col">
+          <label
+            className="mb-2 text-sm font-bold text-gray-800"
+            htmlFor="password"
+          >
             비밀번호
           </label>
           <input
+            id="password"
             type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호를 입력해주세요."
-            className="w-full pb-3 border-b border-[#e5e5e5] text-[15px] placeholder-[#b3b3b3] focus:outline-none focus:border-black transition-colors"
+            required
+            className="border-b border-gray-200 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:border-gray-800 focus:outline-none"
           />
         </div>
 
-        {/* 메인 로그인 버튼 */}
-        <button className="w-full bg-[#ff7b60] text-white font-bold text-[16px] py-4 rounded-xl mb-6 hover:bg-[#fa6048] transition-colors">
+        {/* 로그인 버튼 */}
+        <button
+          type="submit"
+          className="w-full rounded-xl bg-[#FF7051] py-4 text-center text-lg font-bold text-white transition-transform active:scale-[0.98]"
+        >
           로그인
         </button>
+      </form>
 
-        {/* 서브 링크 */}
-        <div className="flex justify-center items-center gap-3 text-[13px] text-[#666666] font-medium mb-12">
-          <button className="hover:text-black transition-colors">
-            아이디 찾기
-          </button>
-          <span className="text-[#cccccc]">|</span>
-          <button className="hover:text-black transition-colors">
-            비밀번호 찾기
-          </button>
-          <span className="text-[#cccccc]">|</span>
-          <button className="hover:text-black transition-colors">
-            회원가입
-          </button>
-        </div>
-
-        {/* 구분선 */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="flex-1 h-px bg-[#e5e5e5]"></div>
-          <span className="text-[13px] text-[#999999] font-medium">
-            간편 로그인
-          </span>
-          <div className="flex-1 h-px bg-[#e5e5e5]"></div>
-        </div>
-
-        {/* 카카오 로그인 버튼 */}
-        <button
-          onClick={() => {
-            alert("카카오 로그인 연동 대기 중입니다.");
-          }}
-          className="w-full bg-[#FEE500] text-black font-bold text-[15px] py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[#f4dc00] transition-colors"
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="black">
-            <path d="M9 3C4.58172 3 1 5.91015 1 9.5C1 11.5796 2.18957 13.4338 4.02534 14.6156C3.84277 15.2892 3.23727 17.1593 3.20815 17.2562C3.20815 17.2562 3.16788 17.3751 3.24355 17.4173C3.31921 17.4595 3.4116 17.414 3.4116 17.414C3.80584 17.1648 6.46743 15.3999 7.07844 14.9818C7.69837 15.1199 8.33967 15.2 9 15.2C13.4183 15.2 17 12.2899 17 8.7C17 5.11015 13.4183 2.2 9 2.2V3Z" />
-          </svg>
-          카카오로 로그인
+      {/* 서브 링크 영역 */}
+      <div className="mt-4 flex items-center justify-center space-x-4 text-sm font-medium text-gray-500">
+        <button type="button" className="hover:text-gray-800">
+          아이디 찾기
         </button>
-      </main>
+        <span className="text-gray-300">|</span>
+        <button type="button" className="hover:text-gray-800">
+          비밀번호 찾기
+        </button>
+        <span className="text-gray-300">|</span>
+        <button type="button" className="hover:text-gray-800">
+          회원가입
+        </button>
+      </div>
+
+      {/* 간편 로그인 구분선 */}
+      <div className="my-8 flex items-center justify-center">
+        <hr className="w-full border-gray-200" />
+        <span className="shrink-0 px-4 text-sm font-medium text-gray-400">
+          간편 로그인
+        </span>
+        <hr className="w-full border-gray-200" />
+      </div>
+
+      {/* 카카오 로그인 버튼 */}
+      <button
+        type="button"
+        onClick={handleKakaoLogin}
+        className="flex w-full items-center justify-center space-x-2 rounded-xl bg-[#FEE500] py-4 text-lg font-bold text-black transition-transform active:scale-[0.98]"
+      >
+        <svg viewBox="0 0 32 32" className="h-5 w-5 fill-current">
+          <path d="M16 4.64c-6.96 0-12.64 4.48-12.64 10.08 0 3.52 2.32 6.64 5.76 8.48l-1.44 5.44c-.16.48.4.88.8.64l6.4-4.4c.4.08.72.08 1.12.08 6.96 0 12.64-4.48 12.64-10.08S22.96 4.64 16 4.64z" />
+        </svg>
+        <span>카카오로 로그인</span>
+      </button>
+
+      {/* 우측 하단 캐릭터 */}
+      <div className="absolute -bottom-2 -right-4 w-40 sm:w-48 pointer-events-none">
+        <img
+          src={logincharacterImg}
+          alt="로그인 캐릭터"
+          className="w-full object-contain"
+        />
+      </div>
     </div>
   );
 }
