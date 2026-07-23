@@ -1,25 +1,18 @@
 import sirenIcon from "../assets/siren.png";
 
-function TopBar({ streakDays, streakMax, onBellClick, hasAlert = false }) {
-  const streaks = Array.from({ length: streakMax }, (_, i) => i < streakDays);
-
+function TopBar({ onBellClick, hasAlert = false }) {
   return (
     <header className="flex items-center justify-between">
-      <ul
-        className="m-0 flex list-none gap-1 p-0"
-        aria-label={`연속 기록 ${streakDays}/${streakMax}일`}
-      >
-        {streaks.map((filled, i) => (
-          <li key={i} aria-hidden="true">
-            <img
-              src={sirenIcon}
-              alt=""
-              width={50}
-              height={24}
-              className={filled ? "opacity-100" : "opacity-20 grayscale"}
-            />
-          </li>
-        ))}
+      <ul className="m-0 flex list-none gap-1 p-0" aria-label="연속 기록">
+        <li aria-hidden="true">
+          <img
+            src={sirenIcon}
+            alt=""
+            width={50}
+            height={24}
+            className="opacity-100"
+          />
+        </li>
       </ul>
       <button
         type="button"

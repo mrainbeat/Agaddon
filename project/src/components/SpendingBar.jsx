@@ -7,7 +7,10 @@ function SpendingBar({ spentAmount, maxAmount, onAddClick }) {
   const remaining = maxAmount - spentAmount;
 
   return (
-    <section className="flex flex-col gap-5" aria-label="소비 내역">
+    <section
+      className="flex flex-col gap-3 mt-auto pb-4"
+      aria-label="소비 내역"
+    >
       <div className="flex items-baseline justify-between">
         <h2 className="text-[20px] font-semibold tracking-[-0.2px] text-[#2B2928]">
           소비 내역
@@ -44,9 +47,11 @@ function SpendingBar({ spentAmount, maxAmount, onAddClick }) {
         />
       </div>
 
-      <div className="flex justify-between text-[13px] font-semibold">
-        <span>{formatWon(spentAmount)} 사용</span>
-        <span className="font-medium text-ink-muted">
+      <div className="flex justify-between text-[14px]">
+        <span className="font-medium text-[#2B2928]">
+          {formatWon(spentAmount)} 사용
+        </span>
+        <span className="font-medium text-[#2B2928]">
           {formatWon(remaining)} 남음
         </span>
       </div>
