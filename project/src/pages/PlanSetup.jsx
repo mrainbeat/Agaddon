@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Character from '../components/Character.jsx'
 import NumberPad from '../components/NumberPad.jsx'
 import {
-  loadData,
-  saveBudgetPlan,
   addDays,
   toISODate,
-  getDDay,
   formatWon,
   formatDateKo,
+  savePlanApi,
+  CHARACTER_TYPES,
 } from '../lib/store.js'
 
 const MAX_AMOUNT_DIGITS = 10
@@ -31,29 +30,17 @@ function formatAmount(digits) {
 
 function PlanSetup() {
   const navigate = useNavigate()
-  const [data, setData] = useState(null)
   const [step, setStep] = useState('form')
   const [periodMode, setPeriodMode] = useState(null)
   const [customDate, setCustomDate] = useState('')
   const [amountDigits, setAmountDigits] = useState('')
-
-  useEffect(() => {
-    let cancelled = false
-    async function load() {
-      const loaded = await loadData()
-      if (!cancelled) setData(loaded)
-    }
-    load()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  if (!data) return null
+  const [characterType, setCharacterType] = useState(CHARACTER_TYPES[0].value)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
 
   const periodEnd =
     periodMode === 'payday'
-      ? data.budget.nextPayday
+      ? toISODate(addDays(new Date(), 30))
       : periodMode === 'nextweek'
         ? toISODate(addDays(new Date(), 7))
         : periodMode === 'custom'
@@ -72,8 +59,18 @@ function PlanSetup() {
   }
 
   async function handleFinish() {
-    await saveBudgetPlan(data, { periodEnd, maxAmount: amount })
-    navigate('/')
+    if (submitting) return
+    setSubmitting(true)
+    setError(null)
+    try {
+      const payDay = new Date(periodEnd).getDate()
+      await savePlanApi({ payDay, monthlyBudget: amount, characterType })
+      navigate('/home')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const pillClass = (selected) =>
@@ -82,7 +79,10 @@ function PlanSetup() {
     }`
 
   if (step === 'confirm') {
-    const daysLeft = Math.max(getDDay(periodEnd), 1)
+    const daysLeft = Math.max(
+      Math.round((new Date(periodEnd) - new Date()) / (1000 * 60 * 60 * 24)),
+      1,
+    )
     const dailyBudget = Math.round(amount / daysLeft)
 
     return (
@@ -100,12 +100,31 @@ function PlanSetup() {
           <Character size={140} />
         </div>
 
+        <div>
+          <p className="mb-2 text-sm font-bold text-ink">어떤 캐릭터로 보여줄까?</p>
+          <div className="flex flex-wrap gap-2">
+            {CHARACTER_TYPES.map((type) => (
+              <button
+                key={type.value}
+                type="button"
+                className={pillClass(characterType === type.value)}
+                onClick={() => setCharacterType(type.value)}
+              >
+                {type.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {error && <p className="text-sm font-semibold text-danger">{error}</p>}
+
         <button
           type="button"
-          className="mt-6 rounded-2xl bg-ink py-4 text-[15px] font-bold text-white"
+          disabled={submitting}
+          className="mt-2 rounded-2xl bg-ink py-4 text-[15px] font-bold text-white disabled:opacity-50"
           onClick={handleFinish}
         >
-          완료
+          {submitting ? '저장 중...' : '완료'}
         </button>
       </div>
     )

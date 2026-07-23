@@ -52,7 +52,7 @@ function Notifications() {
   return (
     <div className="flex flex-col gap-6 px-5 pb-2 pt-5">
       <header className="flex items-center gap-2">
-        <BackButton onClick={() => navigate('/')} />
+        <BackButton onClick={() => navigate('/home')} />
         <h1 className="text-lg font-bold">알림</h1>
       </header>
 

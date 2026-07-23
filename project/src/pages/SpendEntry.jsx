@@ -4,11 +4,12 @@ import Character from '../components/Character.jsx'
 import NumberPad from '../components/NumberPad.jsx'
 import SpendingBar from '../components/SpendingBar.jsx'
 import {
-  loadData,
-  addExpense,
-  getDailyAvailable,
+  fetchHome,
+  postExpenseApi,
   formatWon,
+  toISODate,
   SURVIVAL_DAILY_AMOUNT,
+  EXPENSE_CATEGORIES,
 } from '../lib/store.js'
 
 const MAX_AMOUNT_DIGITS = 10
@@ -44,17 +45,24 @@ function buildReactionMessage(dailyAvailable) {
 
 function SpendEntry() {
   const navigate = useNavigate()
-  const [data, setData] = useState(null)
+  const [home, setHome] = useState(null)
   const [step, setStep] = useState('form')
   const [merchantMode, setMerchantMode] = useState(null)
   const [customMerchant, setCustomMerchant] = useState('')
+  const [category, setCategory] = useState(null)
   const [amountDigits, setAmountDigits] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let cancelled = false
     async function load() {
-      const loaded = await loadData()
-      if (!cancelled) setData(loaded)
+      try {
+        const data = await fetchHome()
+        if (!cancelled) setHome(data)
+      } catch (err) {
+        if (!cancelled) setError(err.message)
+      }
     }
     load()
     return () => {
@@ -62,13 +70,9 @@ function SpendEntry() {
     }
   }, [])
 
-  if (!data) return null
-
-  const merchant =
-    merchantMode === 'custom' ? customMerchant.trim() : merchantMode
-
+  const merchant = merchantMode === 'custom' ? customMerchant.trim() : merchantMode
   const amount = Number(amountDigits || 0)
-  const canProceed = Boolean(merchant) && amount > 0
+  const canProceed = Boolean(merchant) && Boolean(category) && amount > 0
 
   function handleDigit(digit) {
     setAmountDigits((prev) => (prev.length >= MAX_AMOUNT_DIGITS ? prev : prev + digit))
@@ -79,9 +83,22 @@ function SpendEntry() {
   }
 
   async function handleFinish() {
-    const updated = await addExpense(data, { merchant, amount })
-    setData(updated)
-    navigate('/')
+    if (submitting) return
+    setSubmitting(true)
+    setError(null)
+    try {
+      await postExpenseApi({
+        category,
+        amount,
+        expenseDate: toISODate(new Date()),
+        memo: merchant,
+      })
+      navigate('/home')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const pillClass = (selected) =>
@@ -90,11 +107,10 @@ function SpendEntry() {
     }`
 
   if (step === 'confirm') {
-    const previewData = {
-      ...data,
-      budget: { ...data.budget, spentAmount: data.budget.spentAmount + amount },
-    }
-    const dailyAvailable = getDailyAvailable(previewData.budget)
+    const previewSpent = home ? home.totalSpentThisMonth + amount : amount
+    const previewBudget = home ? home.monthlyBudget : 0
+    const daysLeft = home ? Math.max(home.dDayToPayDay, 1) : 1
+    const dailyAvailable = Math.round((previewBudget - previewSpent) / daysLeft)
 
     return (
       <div className="flex flex-col gap-4 px-5 pb-2 pt-5">
@@ -116,14 +132,17 @@ function SpendEntry() {
           <Character size={140} />
         </div>
 
-        <SpendingBar spentAmount={previewData.budget.spentAmount} maxAmount={previewData.budget.maxAmount} />
+        <SpendingBar spentAmount={previewSpent} maxAmount={previewBudget} />
+
+        {error && <p className="text-sm font-semibold text-danger">{error}</p>}
 
         <button
           type="button"
-          className="mt-2 rounded-2xl bg-ink py-4 text-[15px] font-bold text-white"
+          disabled={submitting}
+          className="mt-2 rounded-2xl bg-ink py-4 text-[15px] font-bold text-white disabled:opacity-50"
           onClick={handleFinish}
         >
-          완료
+          {submitting ? '저장 중...' : '완료'}
         </button>
       </div>
     )
@@ -168,6 +187,22 @@ function SpendEntry() {
           onChange={(e) => setCustomMerchant(e.target.value)}
         />
       )}
+
+      <div>
+        <p className="mb-2 text-[13px] font-bold text-ink-muted">카테고리</p>
+        <div className="flex flex-wrap gap-2">
+          {EXPENSE_CATEGORIES.map((label) => (
+            <button
+              key={label}
+              type="button"
+              className={pillClass(category === label)}
+              onClick={() => setCategory(label)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="mt-3">
         <div className="flex items-center justify-between border-b-2 border-line pb-2.5">

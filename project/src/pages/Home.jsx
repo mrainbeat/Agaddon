@@ -4,45 +4,63 @@ import TopBar from "../components/TopBar.jsx";
 import ForecastHeading from "../components/ForecastHeading.jsx";
 import ForecastCard from "../components/ForecastCard.jsx";
 import SpendingBar from "../components/SpendingBar.jsx";
-import {
-  loadData,
-  rollPaydayIfPassed,
-  touchStreak,
-  getDDay,
-  getNextSubscription,
-  getDailyAvailable,
-} from "../lib/store.js";
+import { fetchHome, isLoggedIn } from "../lib/store.js";
 
 function Home() {
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
+  const [home, setHome] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login", { replace: true });
+      return;
+    }
+
     let cancelled = false;
     async function load() {
-      const loaded = await loadData();
-      const withPayday = await rollPaydayIfPassed(loaded);
-      const withStreak = await touchStreak(withPayday);
-      if (!cancelled) setData(withStreak);
+      try {
+        const data = await fetchHome();
+        if (!cancelled) setHome(data);
+      } catch (err) {
+        if (!cancelled) setError(err.message);
+      }
     }
     load();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [navigate]);
 
-  if (!data) return null;
+  if (error) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-5 text-center">
+        <p className="text-sm text-ink-muted">{error}</p>
+        <button
+          type="button"
+          className="rounded-xl bg-[#FF795B] px-5 py-2.5 text-sm font-bold text-white"
+          onClick={() => window.location.reload()}
+        >
+          다시 시도
+        </button>
+      </div>
+    );
+  }
 
-  const dDay = getDDay(data.budget.nextPayday);
-  const nextSubRaw = getNextSubscription(data.subscriptions);
-  const nextSub = nextSubRaw
-    ? { ...nextSubRaw, daysLeft: getDDay(nextSubRaw.nextDate) }
-    : null;
+  if (!home) return null;
 
-  const { spentAmount, maxAmount } = data.budget;
-  const dailyAvailable = getDailyAvailable(data.budget);
-  const isBudgetTight = maxAmount > 0 && spentAmount / maxAmount >= 0.85;
-  const isPaymentSoon = nextSub != null && nextSub.daysLeft <= 3;
+  const {
+    monthlyBudget,
+    totalSpentThisMonth,
+    dailySafeAmount,
+    characterMessage,
+    upcomingSubscription,
+  } = home;
+
+  const isBudgetTight =
+    monthlyBudget > 0 && totalSpentThisMonth / monthlyBudget >= 0.85;
+  const isPaymentSoon =
+    upcomingSubscription != null && upcomingSubscription.dDayToBilling <= 3;
   const hasAlert = isBudgetTight || isPaymentSoon;
 
   return (
@@ -55,7 +73,7 @@ function Home() {
         />
         <div className="mt-1 w-full">
           <ForecastHeading
-            dailyAvailable={dailyAvailable}
+            dailyAvailable={dailySafeAmount}
             onClick={() => navigate("/notifications")}
           />
         </div>
@@ -64,18 +82,15 @@ function Home() {
       {/* 중앙 캐릭터 영역 */}
       <div className="flex flex-col items-center justify-center w-full my-auto py-4">
         <div className="flex justify-center w-full">
-          <ForecastCard
-            nextSub={nextSub}
-            budget={{ spentAmount, maxAmount, daysLeft: dDay }}
-          />
+          <ForecastCard message={characterMessage} />
         </div>
       </div>
 
       {/* 하단 소비 내역 바 영역 */}
       <div className="w-full pb-2">
         <SpendingBar
-          spentAmount={spentAmount}
-          maxAmount={maxAmount}
+          spentAmount={totalSpentThisMonth}
+          maxAmount={monthlyBudget}
           onAddClick={() => navigate("/spend")}
         />
       </div>

@@ -1,4 +1,85 @@
 const STORAGE_KEY = 'tungjangi:data:v1'
+const TOKEN_KEY = 'accessToken'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+export function getToken() {
+  return localStorage.getItem(TOKEN_KEY)
+}
+
+export function setToken(token) {
+  localStorage.setItem(TOKEN_KEY, token)
+}
+
+export function clearToken() {
+  localStorage.removeItem(TOKEN_KEY)
+}
+
+export function isLoggedIn() {
+  return Boolean(getToken())
+}
+
+async function apiFetch(path, options = {}) {
+  const token = getToken()
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  }
+
+  let res
+  try {
+    res = await fetch(`${BASE_URL}${path}`, { ...options, headers })
+  } catch (err) {
+    throw new Error('서버에 연결할 수 없어요. 인터넷 연결을 확인해줘.')
+  }
+
+  const body = await res.json().catch(() => null)
+
+  if (!res.ok || (body && typeof body.status === 'number' && body.status >= 400)) {
+    const message = body?.message || `요청에 실패했어요 (${res.status})`
+    throw new Error(message)
+  }
+
+  return body?.data
+}
+
+export async function fetchHome() {
+  return apiFetch('/api/v1/home')
+}
+
+export async function savePlanApi({ payDay, monthlyBudget, characterType }) {
+  return apiFetch('/api/v1/plans', {
+    method: 'POST',
+    body: JSON.stringify({ payDay, monthlyBudget, characterType }),
+  })
+}
+
+export async function postExpenseApi({ category, amount, expenseDate, memo }) {
+  return apiFetch('/api/v1/expenses', {
+    method: 'POST',
+    body: JSON.stringify({ category, amount, expenseDate, memo }),
+  })
+}
+
+export async function postSubscriptionApi({ paymentName, amount, billingDay }) {
+  return apiFetch('/api/v1/subscriptions', {
+    method: 'POST',
+    body: JSON.stringify({ paymentName, amount, billingDay }),
+  })
+}
+
+export async function toggleSubscriptionApi(paymentId) {
+  return apiFetch(`/api/v1/subscriptions/${paymentId}/toggle`, { method: 'PATCH' })
+}
+
+export const CHARACTER_TYPES = [
+  { value: 'DEFAULT', label: '기본' },
+  { value: 'BEGGAR', label: '거지' },
+  { value: 'EMPTY_ACCOUNT', label: '텅장' },
+  { value: 'FLEX', label: '플렉스' },
+]
+
+export const EXPENSE_CATEGORIES = ['식비', '쇼핑', '교통', '문화/여가', '기타']
 
 export function addDays(date, days) {
   const d = new Date(date)

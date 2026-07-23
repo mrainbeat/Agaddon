@@ -1,5 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchHome, isLoggedIn, clearToken } from "../lib/store.js";
 
 // 아이콘 임포트
 import personIcon from "../assets/person.svg";
@@ -15,6 +16,32 @@ import logoutIcon from "../assets/logout.svg";
 import smileIcon from "../assets/smile.png";
 
 export default function MyPage() {
+  const navigate = useNavigate();
+  const [nickname, setNickname] = useState(null);
+  const loggedIn = isLoggedIn();
+
+  useEffect(() => {
+    if (!loggedIn) return;
+    let cancelled = false;
+    fetchHome()
+      .then((data) => {
+        if (!cancelled) setNickname(data.nickname);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [loggedIn]);
+
+  function handleAuthAction() {
+    if (loggedIn) {
+      clearToken();
+      navigate("/login");
+    } else {
+      navigate("/login");
+    }
+  }
+
   const section1 = [
     {
       title: "프로필 수정",
@@ -155,12 +182,9 @@ export default function MyPage() {
             </svg>
           </div>
           <h1 className="text-[22px] font-bold text-black tracking-tight break-keep">
-            김거지
+            {loggedIn ? (nickname ?? "불러오는 중...") : "로그인이 필요해요"}
           </h1>
         </div>
-        <button className="text-[13px] text-[#b3b3b3] font-medium hover:text-gray-600 transition-colors shrink-0">
-          고객센터
-        </button>
       </header>
 
       <main className="flex flex-col w-full">
@@ -191,30 +215,32 @@ export default function MyPage() {
         <div className="h-px bg-[#f0f0f0] mx-5" />
 
         <div className="py-2 flex flex-col w-full">
-          <button type="button" className={rowClass}>
+          <button type="button" className={rowClass} onClick={handleAuthAction}>
             <Row
-              title="로그아웃"
+              title={loggedIn ? "로그아웃" : "로그인"}
               icon={
                 <img
                   src={logoutIcon}
-                  alt="로그아웃"
+                  alt={loggedIn ? "로그아웃" : "로그인"}
                   className="w-5 h-5 object-contain"
                 />
               }
             />
           </button>
-          <button type="button" className={rowClass}>
-            <Row
-              title="회원탈퇴"
-              icon={
-                <img
-                  src={smileIcon}
-                  alt="회원탈퇴"
-                  className="w-5 h-5 object-contain"
-                />
-              }
-            />
-          </button>
+          {loggedIn && (
+            <button type="button" className={rowClass}>
+              <Row
+                title="회원탈퇴"
+                icon={
+                  <img
+                    src={smileIcon}
+                    alt="회원탈퇴"
+                    className="w-5 h-5 object-contain"
+                  />
+                }
+              />
+            </button>
+          )}
         </div>
       </main>
     </div>
