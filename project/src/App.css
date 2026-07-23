@@ -1,184 +1,314 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
-
-#center {
+/* ---------- 앱 프레임: 모바일 화면 하나를 흉내낸 컨테이너 ---------- */
+.app-frame {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100svh;
+  background: var(--bg-app);
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
   position: relative;
-  width: 100%;
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+  @media (min-width: 431px) {
+    min-height: min(100svh, 900px);
+    margin: 24px 0;
+    border-radius: 32px;
+    box-shadow: 0 20px 60px rgba(20, 18, 40, 0.16);
+    overflow: hidden;
   }
+}
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 96px;
+}
+
+.screen {
+  padding: 20px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ---------- 상단바: 스트릭 별 + 알림 벨 ---------- */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 0;
+}
+
+.streak {
+  list-style: none;
+  display: flex;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+}
+
+.streak .star {
+  font-size: 14px;
+  color: var(--border-soft);
+}
+
+.streak .star.filled {
+  color: var(--star);
+}
+
+.bell {
+  background: none;
+  border: none;
+  padding: 4px;
+  color: var(--text);
+  display: flex;
+}
+
+/* ---------- 오늘의 소비예보 카드 ---------- */
+.forecast-card {
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-app);
+}
+
+.forecast-body {
+  padding: 4px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.dday-row {
+  margin-top: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text);
+}
+
+.dday-row h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.forecast-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.speech-bubble {
+  position: relative;
+  max-width: 260px;
+  background: var(--accent-soft);
+  border-radius: 16px;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.speech-bubble p {
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 140%;
+  color: var(--text);
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: var(--accent-soft);
+  border-bottom: 0;
+}
+
+/* ---------- 소비 내역 게이지 ---------- */
+.spending-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 4px 0;
+}
+
+.spending-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.spending-section-head h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.spending-percent {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.spending-percent.over {
+  color: var(--danger);
+}
+
+.spending-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--border-soft);
+  overflow: hidden;
+}
+
+.spending-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--text);
+  transition: width 0.4s ease;
+}
+
+.spending-fill.warn {
+  background: var(--warn);
+}
+
+.spending-fill.over {
+  background: var(--danger);
+}
+
+.spending-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.spending-labels .muted {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ---------- 하단 네비게이션 ---------- */
+.bottom-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg-app);
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.nav-tab.active {
+  color: var(--accent);
+}
+
+/* ---------- 준비 중 화면 ---------- */
+.coming-soon {
+  align-items: center;
+  text-align: center;
+  padding-top: 96px;
+  gap: 12px;
+}
+
+.coming-soon-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.coming-soon h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.coming-soon p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 150%;
+  max-width: 280px;
+}
+
+/* ---------- 마이페이지 ---------- */
+.my-page h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.account-link-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.account-link-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.account-link-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 140%;
+}
+
+.account-link-btn {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 14px;
+}
+
+.account-link-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.account-link-btn.done {
+  background: #18a558;
+}
+
+.my-page-note {
+  font-size: 12.5px;
+  color: var(--text-muted);
 }
