@@ -1,12 +1,13 @@
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Friends from "./pages/Friends.jsx";
 import Records from "./pages/Records.jsx";
 import MyPage from "./pages/MyPage.jsx";
 import Notifications from "./pages/Notifications.jsx";
 import PlanSetup from "./pages/PlanSetup.jsx";
-import LoginPage from "./pages/LoginPage.jsx"; // 👈 실제 파일 이름(LoginPage.jsx)과 완전 동일하게 지정!
+import SpendEntry from "./pages/SpendEntry.jsx";
 import BottomNav from "./components/BottomNav.jsx";
+import LoginPage from "./pages/LoginPage.jsx"; // 👈 실제 파일 이름(LoginPage.jsx)과 완전 동일하게 지정!
 
 function Layout() {
   return (
@@ -29,8 +30,6 @@ function App() {
       {/* 👈 import 한 LoginPage와 명칭 일치 */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/Login" element={<Navigate to="/login" replace />} />
-
-      {/* 하단바(BottomNav) 포함 페이지 */}
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/friends" element={<Friends />} />
@@ -38,6 +37,7 @@ function App() {
         <Route path="/my" element={<MyPage />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/plan" element={<PlanSetup />} />
+        <Route path="/spend" element={<SpendEntry />} />
       </Route>
     </Routes>
   );
