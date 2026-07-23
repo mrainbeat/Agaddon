@@ -1,4 +1,3 @@
-// 상단바: 출석 스트릭(별) + 알림 벨
 function TopBar({ streakDays, streakMax, onBellClick, hasAlert = false }) {
   const stars = Array.from({ length: streakMax }, (_, i) => i < streakDays)
 

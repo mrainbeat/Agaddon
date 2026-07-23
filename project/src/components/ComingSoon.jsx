@@ -1,4 +1,3 @@
-// 아직 디자인/기능이 정해지지 않은 화면을 위한 자리표시자
 function ComingSoon({ title, description }) {
   return (
     <div className="flex flex-1 flex-col items-center gap-3 px-5 pb-2 pt-24 text-center">

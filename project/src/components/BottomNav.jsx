@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom'
 
+const ACTIVE_CLASS = 'text-warn'
+
 const TABS = [
   {
     to: '/',
@@ -55,7 +57,7 @@ function BottomNav() {
           end={tab.to === '/'}
           className={({ isActive }) =>
             `flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 text-[11px] font-semibold no-underline ${
-              isActive ? 'text-accent' : 'text-ink-muted'
+              isActive ? ACTIVE_CLASS : 'text-ink-muted'
             }`
           }
         >

@@ -29,8 +29,6 @@ function formatAmount(digits) {
   return Number(digits).toLocaleString('ko-KR')
 }
 
-// 소비했을 때 캐릭터 반응 메시지. 이번 소비를 반영한 "오늘 쓸 수 있는 하루 금액"
-// 기준으로 톤을 나눈다.
 function buildReactionMessage(dailyAvailable) {
   if (dailyAvailable <= 0) {
     return '오늘 쓸 수 있는 돈이 이미 없어... 정말 조심하자ㅠㅠ'
@@ -44,19 +42,24 @@ function buildReactionMessage(dailyAvailable) {
   return '아직 여유있어! 계속 이 페이스 유지하자'
 }
 
-// 소비 입력: 방금 어디서 얼마를 썼는지 기록한다.
-// 완료하면 store의 budget.spentAmount가 늘고 history에 기록이 남으며,
-// 홈 화면의 소비 게이지와 소비예보가 곧바로 이 값을 반영한다.
 function SpendEntry() {
   const navigate = useNavigate()
   const [data, setData] = useState(null)
-  const [step, setStep] = useState('form') // 'form' | 'confirm'
-  const [merchantMode, setMerchantMode] = useState(null) // '쿠팡' | '무신사' | 'custom'
+  const [step, setStep] = useState('form')
+  const [merchantMode, setMerchantMode] = useState(null)
   const [customMerchant, setCustomMerchant] = useState('')
   const [amountDigits, setAmountDigits] = useState('')
 
   useEffect(() => {
-    setData(loadData())
+    let cancelled = false
+    async function load() {
+      const loaded = await loadData()
+      if (!cancelled) setData(loaded)
+    }
+    load()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   if (!data) return null
@@ -75,8 +78,8 @@ function SpendEntry() {
     setAmountDigits((prev) => prev.slice(0, -1))
   }
 
-  function handleFinish() {
-    const updated = addExpense(data, { merchant, amount })
+  async function handleFinish() {
+    const updated = await addExpense(data, { merchant, amount })
     setData(updated)
     navigate('/')
   }

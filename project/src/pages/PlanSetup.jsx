@@ -12,7 +12,7 @@ import {
   formatDateKo,
 } from '../lib/store.js'
 
-const MAX_AMOUNT_DIGITS = 10 // 최대 99억 9999만원까지
+const MAX_AMOUNT_DIGITS = 10
 
 function BackButton({ onClick }) {
   return (
@@ -29,20 +29,24 @@ function formatAmount(digits) {
   return Number(digits).toLocaleString('ko-KR')
 }
 
-// 플랜 세우기: 기간(월급날/다음주/직접입력) + 예산 총액을 정하고,
-// 마지막에 캐릭터가 "하루에 얼마 쓰면 되는지" 계산해서 확인시켜준다.
-// 저장하면 store의 budget.nextPayday / budget.maxAmount가 갱신되고,
-// 홈 화면의 "월급까지 D-n"과 소비 게이지가 곧바로 이 값을 반영한다.
 function PlanSetup() {
   const navigate = useNavigate()
   const [data, setData] = useState(null)
-  const [step, setStep] = useState('form') // 'form' | 'confirm'
-  const [periodMode, setPeriodMode] = useState(null) // 'payday' | 'nextweek' | 'custom'
+  const [step, setStep] = useState('form')
+  const [periodMode, setPeriodMode] = useState(null)
   const [customDate, setCustomDate] = useState('')
   const [amountDigits, setAmountDigits] = useState('')
 
   useEffect(() => {
-    setData(loadData())
+    let cancelled = false
+    async function load() {
+      const loaded = await loadData()
+      if (!cancelled) setData(loaded)
+    }
+    load()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   if (!data) return null
@@ -67,8 +71,8 @@ function PlanSetup() {
     setAmountDigits((prev) => prev.slice(0, -1))
   }
 
-  function handleFinish() {
-    saveBudgetPlan(data, { periodEnd, maxAmount: amount })
+  async function handleFinish() {
+    await saveBudgetPlan(data, { periodEnd, maxAmount: amount })
     navigate('/')
   }
 
@@ -162,7 +166,7 @@ function PlanSetup() {
 
       <button
         type="button"
-        className="mt-5 rounded-2xl bg-accent py-[15px] text-[15px] font-bold text-white disabled:bg-line-soft disabled:text-ink-muted"
+        className="mt-5 rounded-2xl bg-warn py-[15px] text-[15px] font-bold text-white disabled:bg-line-soft disabled:text-ink-muted"
         disabled={!canProceed}
         onClick={() => canProceed && setStep('confirm')}
       >
