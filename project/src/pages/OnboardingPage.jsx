@@ -13,7 +13,6 @@ export default function OnboardingPage() {
 
       {/* 2. 메인 콘텐츠 (로고 + 텍스트 + 버튼) */}
       <div className="flex w-full flex-col z-10">
-        {/* 로고 & 서브타이틀 (우측 정렬 느낌을 살리기 위해 items-end 사용) */}
         <div className="flex flex-col items-end self-center">
           <img src={Logo} alt="텅장이 로고" className="w-56 object-contain" />
         </div>
