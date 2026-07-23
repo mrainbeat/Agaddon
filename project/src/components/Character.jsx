@@ -1,3 +1,7 @@
+// 텅장이 마스코트 캐릭터
+// 실제 일러스트 파일이 아직 없어서 인라인 SVG로 대체했습니다.
+// 나중에 디자인팀 캐릭터 이미지(PNG/SVG)가 나오면 이 컴포넌트 내부만
+// <img src="..."/> 로 교체하면 되고, 사용하는 쪽(ForecastCard 등) 코드는 그대로 둬도 됩니다.
 function Character({ mood = "worried", size = 120 }) {
   return (
     <svg
@@ -7,20 +11,20 @@ function Character({ mood = "worried", size = 120 }) {
       role="img"
       aria-label="텅장이 캐릭터"
     >
-      <circle cx="60" cy="62" r="46" fill="#EFE6FF" />
+      <circle cx="60" cy="62" r="46" fill="#E9E9EE" />
 
       {/* 몸통 / 후드티 */}
-      <path d="M28 108c1-20 12-32 32-32s31 12 32 32z" fill="#5B6BF5" />
+      <path d="M28 108c1-20 12-32 32-32s31 12 32 32z" fill="#8CA0C9" />
       <path
         d="M28 108c1-20 12-32 32-32s31 12 32 32"
         fill="none"
-        stroke="#4453D8"
+        stroke="#6C82AD"
         strokeWidth="2"
       />
       <path
         d="M46 80c4 6 24 6 28 0"
         fill="none"
-        stroke="#4453D8"
+        stroke="#6C82AD"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -34,48 +38,42 @@ function Character({ mood = "worried", size = 120 }) {
         fill="#6B4A2E"
       />
 
-      {/* 눈썹 */}
+      {/* 눈썹 (걱정스러운 표정) */}
       <path
-        d="M45 50c3-3 8-3 11-1"
+        d="M44 49c3-3 8-4 11-2"
         fill="none"
         stroke="#4A2F1C"
         strokeWidth="2.5"
         strokeLinecap="round"
       />
       <path
-        d="M64 49c3-2 8-2 11 1"
+        d="M65 47c3-2 8-1 11 2"
         fill="none"
         stroke="#4A2F1C"
         strokeWidth="2.5"
         strokeLinecap="round"
       />
 
-      {/* 눈 */}
-      <circle cx="50" cy="58" r="3.4" fill="#2B2233" />
-      <circle cx="70" cy="58" r="3.4" fill="#2B2233" />
+      {/* 눈 (살짝 아래를 보는 걱정스러운 눈) */}
+      <circle cx="49" cy="59" r="3.4" fill="#2B2233" />
+      <circle cx="69" cy="59" r="3.4" fill="#2B2233" />
 
-      {/* 입 */}
-      <path
-        d="M52 70c4 3 12 3 16 0"
-        fill="none"
-        stroke="#B36B4A"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-      />
+      {/* 입 (당황한 "oh no" 입) */}
+      <ellipse cx="59" cy="73" rx="4.2" ry="5" fill="#B36B4A" opacity="0.85" />
 
       {/* 볼터치 */}
       <circle cx="42" cy="65" r="4" fill="#FFB6A0" opacity="0.6" />
       <circle cx="78" cy="65" r="4" fill="#FFB6A0" opacity="0.6" />
 
-      {/* 손 */}
-      <circle cx="94" cy="88" r="8" fill="#FFDCB8" />
+      {/* 손 (걱정스럽게 뺨 쪽으로 든 손) */}
       <path
-        d="M84 100c2-8 6-12 10-14"
+        d="M80 98c2-14 6-26 13-34"
         fill="none"
-        stroke="#4453D8"
+        stroke="#6C82AD"
         strokeWidth="10"
         strokeLinecap="round"
       />
+      <circle cx="94" cy="63" r="8" fill="#FFDCB8" />
     </svg>
   );
 }

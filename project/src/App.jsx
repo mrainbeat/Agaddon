@@ -6,12 +6,15 @@ import MyPage from './pages/MyPage.jsx'
 import Notifications from './pages/Notifications.jsx'
 import PlanSetup from './pages/PlanSetup.jsx'
 import BottomNav from './components/BottomNav.jsx'
-import './App.css'
 
 function Layout() {
   return (
-    <div className="app-frame">
-      <main className="app-main">
+    <div
+      className="relative flex w-full max-w-[430px] flex-col bg-surface
+        min-h-svh
+        sm:my-6 sm:h-[900px] sm:min-h-0 sm:overflow-hidden sm:rounded-[32px] sm:shadow-[0_20px_60px_rgba(20,18,40,0.16)]"
+    >
+      <main className="flex flex-1 flex-col overflow-y-auto pb-24">
         <Outlet />
       </main>
       <BottomNav />

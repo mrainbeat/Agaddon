@@ -1,59 +1,61 @@
 @import "tailwindcss";
-:root {
-  --bg-page: #f0f0f4;
-  --bg-app: #ffffff;
-  --text: #1c1b22;
-  --text-muted: #8b899a;
-  --border: #16151c;
-  --border-soft: #e4e3ea;
-  --accent: #5b6bf5;
-  --accent-soft: #eef0ff;
-  --danger: #ff4d4f;
-  --warn: #ff9f43;
-  --star: #ff4d4f;
 
-  --sans:
-    "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+/* 팀에서 쓰던 색/폰트 토큰을 Tailwind v4 theme로 그대로 옮겨서
+   bg-page, bg-surface, text-ink, bg-accent 같은 유틸리티 클래스로 쓸 수 있게 함 */
+@theme {
+  --color-page: #f0f0f4;
+  --color-surface: #ffffff;
+  --color-ink: #1c1b22;
+  --color-ink-muted: #8b899a;
+  --color-line: #16151c;
+  --color-line-soft: #e4e3ea;
+  --color-accent: #5b6bf5;
+  --color-accent-soft: #eef0ff;
+  --color-danger: #ff4d4f;
+  --color-danger-soft: #ffe9e9;
+  --color-warn: #ff9f43;
+  --color-warn-soft: #fff4e5;
+  --color-star: #ff4d4f;
 
-  font-family: var(--sans);
-  color: var(--text);
-  color-scheme: light;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-sans:
+    'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR',
+    system-ui, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg-page);
-}
+  body {
+    min-height: 100svh;
+    display: flex;
+    justify-content: center;
+    background: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-body {
-  min-height: 100svh;
-  display: flex;
-  justify-content: center;
-}
+  #root {
+    width: 100%;
+    min-height: 100svh;
+    display: flex;
+    justify-content: center;
+  }
 
-#root {
-  width: 100%;
-  min-height: 100svh;
-  display: flex;
-  justify-content: center;
-}
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-}
-
-h1,
-h2,
-p {
-  margin: 0;
+  h1,
+  h2,
+  p {
+    margin: 0;
+  }
 }

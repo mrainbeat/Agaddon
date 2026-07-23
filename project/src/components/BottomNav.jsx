@@ -44,13 +44,20 @@ const TABS = [
 
 function BottomNav() {
   return (
-    <nav className="bottom-nav" aria-label="주요 메뉴">
+    <nav
+      className="absolute inset-x-0 bottom-0 flex border-t border-line-soft bg-surface px-2 pb-[calc(8px+env(safe-area-inset-bottom,0px))] pt-2"
+      aria-label="주요 메뉴"
+    >
       {TABS.map((tab) => (
         <NavLink
           key={tab.to}
           to={tab.to}
           end={tab.to === '/'}
-          className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}
+          className={({ isActive }) =>
+            `flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 text-[11px] font-semibold no-underline ${
+              isActive ? 'text-accent' : 'text-ink-muted'
+            }`
+          }
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             {tab.icon}
