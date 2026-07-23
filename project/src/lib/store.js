@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'tungjangi:data:v1'
 const TOKEN_KEY = 'accessToken'
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '')
 
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY)

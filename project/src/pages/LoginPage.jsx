@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import logincharacterImg from "../assets/logincharacter.png"; // 이미지 위치에 따라 경로 확인
 import arrowIcon from "../assets/arrow.svg";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "");
 
 export default function LoginPage() {
   const navigate = useNavigate();
