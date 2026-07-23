@@ -1,9 +1,9 @@
 import characterImg from '../assets/텅장이.png'
 
-function Character({ size = 120 }) {
+function Character({ size = 120, imgScale = 2.05, verticalAnchor = 62 }) {
   const glowSize = size * 2.1
   const discSize = size * 1.3
-  const imgSize = size * 2.05
+  const imgSize = size * imgScale
 
   return (
     <div
@@ -24,9 +24,11 @@ function Character({ size = 120 }) {
           style={{
             width: imgSize,
             height: imgSize,
+            maxWidth: 'none',
+            maxHeight: 'none',
             position: 'absolute',
             left: '50%',
-            top: '62%',
+            top: `${verticalAnchor}%`,
             transform: 'translate(-50%, -50%)',
           }}
           className="object-contain"

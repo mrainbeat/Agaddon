@@ -1,12 +1,23 @@
+import sirenIcon from "../assets/siren.png";
+
 function TopBar({ streakDays, streakMax, onBellClick, hasAlert = false }) {
-  const stars = Array.from({ length: streakMax }, (_, i) => i < streakDays)
+  const streaks = Array.from({ length: streakMax }, (_, i) => i < streakDays);
 
   return (
     <header className="flex items-center justify-between">
-      <ul className="m-0 flex list-none gap-[3px] p-0" aria-label={`연속 기록 ${streakDays}/${streakMax}일`}>
-        {stars.map((filled, i) => (
-          <li key={i} className={`text-sm ${filled ? 'text-star' : 'text-line-soft'}`} aria-hidden="true">
-            ★
+      <ul
+        className="m-0 flex list-none gap-1 p-0"
+        aria-label={`연속 기록 ${streakDays}/${streakMax}일`}
+      >
+        {streaks.map((filled, i) => (
+          <li key={i} aria-hidden="true">
+            <img
+              src={sirenIcon}
+              alt=""
+              width={50}
+              height={24}
+              className={filled ? "opacity-100" : "opacity-20 grayscale"}
+            />
           </li>
         ))}
       </ul>
@@ -14,7 +25,7 @@ function TopBar({ streakDays, streakMax, onBellClick, hasAlert = false }) {
         type="button"
         className="relative flex p-1 text-ink"
         onClick={onBellClick}
-        aria-label={hasAlert ? '알림 (새 소식 있음)' : '알림'}
+        aria-label={hasAlert ? "알림 (새 소식 있음)" : "알림"}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <path
@@ -23,7 +34,12 @@ function TopBar({ streakDays, streakMax, onBellClick, hasAlert = false }) {
             strokeWidth="1.8"
             strokeLinejoin="round"
           />
-          <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path
+            d="M10 19a2 2 0 0 0 4 0"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
         </svg>
         {hasAlert && (
           <span
@@ -33,7 +49,7 @@ function TopBar({ streakDays, streakMax, onBellClick, hasAlert = false }) {
         )}
       </button>
     </header>
-  )
+  );
 }
 
-export default TopBar
+export default TopBar;

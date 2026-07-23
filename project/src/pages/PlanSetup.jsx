@@ -93,7 +93,7 @@ function PlanSetup() {
 
         <div className="mt-10 flex flex-col items-center gap-3">
           <div className="relative max-w-[300px] rounded-2xl bg-accent-soft px-4 py-3 text-center after:absolute after:-bottom-2 after:left-1/2 after:border-8 after:border-transparent after:border-b-0 after:border-t-accent-soft after:content-[''] after:[transform:translateX(-50%)]">
-            <p className="text-sm font-semibold leading-relaxed text-ink">
+            <p className="text-[22px] font-bold leading-[140%] tracking-[-0.22px] text-[#6B493D]">
               오케이! 그럼 하루에 {formatWon(dailyBudget)} 소비하면 적절해요!
             </p>
           </div>
