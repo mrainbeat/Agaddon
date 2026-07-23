@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 // 아이콘 임포트 (회원탈퇴 아이콘을 smile로 변경)
 import personIcon from "../assets/person.svg";
 import VectorIcon from "../assets/Vector.svg";
-import LifeIcon from "../assets/life.svg";
+import LifeIcon from "../assets/Life.svg";
 import alamIcon from "../assets/alam.svg";
 import cashIcon from "../assets/cash.svg";
 import bookIcon from "../assets/book.svg";
