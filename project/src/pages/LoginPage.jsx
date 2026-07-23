@@ -29,9 +29,9 @@ export default function LoginPage() {
 
       const result = await response.json();
 
-      if (response.ok && result.status === 200) {
+      if (response.ok && result.isSuccess) {
         // 로그인 성공 시 발급받은 JWT 토큰 저장
-        localStorage.setItem("accessToken", result.data.accessToken);
+        localStorage.setItem("accessToken", result.result.accessToken);
 
         // 홈 화면으로 이동
         navigate("/home", { replace: true });
@@ -145,7 +145,7 @@ export default function LoginPage() {
             비밀번호 찾기
           </button>
           <span className="text-gray-300">|</span>
-          <button type="button" className="hover:text-gray-800">
+          <button type="button" className="hover:text-gray-800" onClick={() => navigate('/signup')}>
             회원가입
           </button>
         </div>

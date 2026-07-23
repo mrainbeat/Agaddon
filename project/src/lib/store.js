@@ -35,12 +35,12 @@ async function apiFetch(path, options = {}) {
 
   const body = await res.json().catch(() => null)
 
-  if (!res.ok || (body && typeof body.status === 'number' && body.status >= 400)) {
+  if (!res.ok || (body && body.isSuccess === false)) {
     const message = body?.message || `요청에 실패했어요 (${res.status})`
     throw new Error(message)
   }
 
-  return body?.data
+  return body?.result
 }
 
 export async function fetchHome() {

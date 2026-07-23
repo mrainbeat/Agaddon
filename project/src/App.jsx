@@ -9,6 +9,7 @@ import PlanSetup from "./pages/PlanSetup.jsx";
 import SpendEntry from "./pages/SpendEntry.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
 import OAuthCallback from "./pages/OAuthCallback.jsx";
 
 function Layout() {
@@ -40,6 +41,9 @@ function App() {
       {/* 로그인 화면 */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/Login" element={<Navigate to="/login" replace />} />
+
+      {/* 회원가입 화면 */}
+      <Route path="/signup" element={<SignupPage />} />
 
       {/* 카카오 로그인 후 백엔드가 리다이렉트하는 콜백 페이지 */}
       <Route path="/oauth/callback" element={<OAuthCallback />} />
