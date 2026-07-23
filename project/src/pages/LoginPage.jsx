@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logincharacterImg from "../assets/logincharacter.png"; // 이미지 위치에 따라 경로 확인
-import Logo from "../assets/Logo.svg";
 
 // 환경변수에서 API 베이스 URL 불러오기
 const BASE_URL =
@@ -57,10 +56,9 @@ export default function LoginPage() {
   };
 
   return (
-    /* h-dvh와 overflow-hidden으로 화면을 딱 맞추고 스크롤 방지 */
-    <div className="mx-auto flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-white px-6 pt-12">
-      {/* 상단 콘텐츠 래퍼 (유연한 공간 활용을 위해 flex-col 유지) */}
-      <div className="flex w-full flex-col">
+    <div className="mx-auto flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-white px-6 pt-4">
+      {" "}
+      <div className="w-full">
         {/* 뒤로가기 버튼 */}
         <button
           onClick={() => navigate(-1)}
@@ -176,7 +174,6 @@ export default function LoginPage() {
           <span>카카오로 로그인</span>
         </button>
       </div>
-
       {/* 우측 하단 캐릭터 */}
       {/* mt-auto를 사용하여 상단 콘텐츠 아래 남는 공간을 모두 밀어내어 자연스럽게 하단에 배치 */}
       <div className="mt-auto flex w-full justify-end pointer-events-none -mr-4 pb-2">
