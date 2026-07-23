@@ -4,12 +4,37 @@ import TopBar from "../components/TopBar.jsx";
 import ForecastHeading from "../components/ForecastHeading.jsx";
 import ForecastCard from "../components/ForecastCard.jsx";
 import SpendingBar from "../components/SpendingBar.jsx";
-import { fetchHome, isLoggedIn } from "../lib/store.js";
+import {
+  fetchHome,
+  isLoggedIn,
+  loadData,
+  getDailyAvailable,
+  getNextSubscription,
+  getDDay,
+} from "../lib/store.js";
+
+async function buildFallbackHome() {
+  const local = await loadData();
+  const nextSub = getNextSubscription(local.subscriptions);
+  return {
+    monthlyBudget: local.budget.maxAmount,
+    totalSpentThisMonth: local.budget.spentAmount,
+    dailySafeAmount: getDailyAvailable(local.budget),
+    characterMessage: "아직 예산을 설정 안 했어요! 설정하면 더 정확하게 알려줄게요",
+    upcomingSubscription: nextSub
+      ? {
+          name: nextSub.name,
+          amount: nextSub.amount,
+          dDayToBilling: getDDay(nextSub.nextDate),
+        }
+      : null,
+    isFallback: true,
+  };
+}
 
 function Home() {
   const navigate = useNavigate();
   const [home, setHome] = useState(null);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -21,9 +46,11 @@ function Home() {
     async function load() {
       try {
         const data = await fetchHome();
-        if (!cancelled) setHome(data);
+        if (!cancelled) setHome({ ...data, isFallback: false });
       } catch (err) {
-        if (!cancelled) setError(err.message);
+        // 백엔드에 아직 예산(플랜)이 설정 안 된 사용자는 로컬 기본값으로 홈을 보여준다.
+        const fallback = await buildFallbackHome();
+        if (!cancelled) setHome(fallback);
       }
     }
     load();
@@ -31,21 +58,6 @@ function Home() {
       cancelled = true;
     };
   }, [navigate]);
-
-  if (error) {
-    return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-5 text-center">
-        <p className="text-sm text-ink-muted">{error}</p>
-        <button
-          type="button"
-          className="rounded-xl bg-[#FF795B] px-5 py-2.5 text-sm font-bold text-white"
-          onClick={() => window.location.reload()}
-        >
-          다시 시도
-        </button>
-      </div>
-    );
-  }
 
   if (!home) return null;
 
@@ -55,6 +67,7 @@ function Home() {
     dailySafeAmount,
     characterMessage,
     upcomingSubscription,
+    isFallback,
   } = home;
 
   const isBudgetTight =
@@ -71,6 +84,16 @@ function Home() {
           onBellClick={() => navigate("/notifications")}
           hasAlert={hasAlert}
         />
+        {isFallback && (
+          <button
+            type="button"
+            onClick={() => navigate("/plan")}
+            className="mt-2 flex w-full items-center justify-between rounded-xl bg-accent-soft px-3 py-2 text-left text-[13px] font-semibold text-[#6B493D]"
+          >
+            <span>아직 예산을 설정 안 했어요</span>
+            <span className="font-bold">설정하기 &gt;</span>
+          </button>
+        )}
         <div className="mt-1 w-full">
           <ForecastHeading
             dailyAvailable={dailySafeAmount}
