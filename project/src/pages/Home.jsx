@@ -46,14 +46,14 @@ function Home() {
   const hasAlert = isBudgetTight || isPaymentSoon;
 
   return (
-    <div className="flex flex-1 flex-col px-5 pb-20 pt-5 justify-between h-full relative">
-      {/* 상단 영역 (TopBar 및 헤딩) */}
-      <div className="flex flex-col">
+    <div className="flex flex-1 flex-col px-5 pb-24 pt-5 justify-between h-full w-full max-w-md mx-auto box-border overflow-x-hidden">
+      {/* 상단 영역 */}
+      <div className="flex flex-col w-full">
         <TopBar
           onBellClick={() => navigate("/notifications")}
           hasAlert={hasAlert}
         />
-        <div className="mt-1">
+        <div className="mt-1 w-full">
           <ForecastHeading
             dailyAvailable={dailyAvailable}
             onClick={() => navigate("/notifications")}
@@ -61,9 +61,9 @@ function Home() {
         </div>
       </div>
 
-      {/* 중앙 ~ 살짝 아래에 고정될 캐릭터 영역 */}
-      <div className="flex flex-col items-center justify-center -mt-10">
-        <div className="flex justify-center scale-110">
+      {/* 중앙 캐릭터 영역 */}
+      <div className="flex flex-col items-center justify-center w-full my-auto py-4">
+        <div className="flex justify-center w-full">
           <ForecastCard
             nextSub={nextSub}
             budget={{ spentAmount, maxAmount, daysLeft: dDay }}
@@ -71,7 +71,7 @@ function Home() {
         </div>
       </div>
 
-      {/* 네비바 바로 위에 딱 붙어서 독립적으로 위치할 소비 내역 바 영역 */}
+      {/* 하단 소비 내역 바 영역 */}
       <div className="w-full pb-2">
         <SpendingBar
           spentAmount={spentAmount}

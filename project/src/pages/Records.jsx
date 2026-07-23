@@ -109,9 +109,9 @@ export default function Record() {
   };
 
   return (
-    <div className="w-full max-w-[430px] bg-white mx-auto relative border-x border-gray-100 overflow-hidden pb-20">
+    <div className="w-full max-w-md bg-white mx-auto relative border-x border-gray-100 overflow-x-hidden pb-24 box-border">
       {/* 상단 헤더 */}
-      <header className="px-5 pt-5 pb-4 flex flex-col gap-3 border-b border-[#B4B4B4] sticky top-0 bg-white z-10">
+      <header className="px-5 pt-5 pb-4 flex flex-col gap-3 border-b border-[#B4B4B4] sticky top-0 bg-white z-10 w-full box-border">
         <Link to="/home" className="w-fit hover:opacity-70 transition-opacity">
           <img
             src={arrowIcon}
@@ -119,27 +119,26 @@ export default function Record() {
             className="w-10 h-10 object-contain"
           />
         </Link>
-        <h1 className="text-[22px] font-bold text-black tracking-tight">
+        <h1 className="text-[22px] font-bold text-black tracking-tight break-keep">
           소비 기록
         </h1>
       </header>
 
       {/* 메인 리스트 영역 */}
-      <main className="flex flex-col px-5 pt-4">
+      <main className="flex flex-col px-5 pt-4 w-full box-border">
         {historyData.map((group, groupIndex) => (
-          <div key={groupIndex} className="mb-6">
-            <h2 className="text-[14px] font-semibold text-[#8b899a] mb-3">
+          <div key={groupIndex} className="mb-6 w-full">
+            <h2 className="text-[14px] font-semibold text-[#8b899a] mb-3 break-keep">
               {group.date}
             </h2>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 w-full">
               {group.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between w-full box-border"
                 >
-                  <div className="flex items-center gap-3">
-                    {/* 정사각형 박스 형태로 변경 (rounded-full 제거 및 rounded-lg 등 필요시 조절 가능) */}
+                  <div className="flex items-center gap-3 min-w-0">
                     <div
                       className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 overflow-hidden ${
                         item.hasBg ? "bg-[#FF795B]" : ""
@@ -151,11 +150,11 @@ export default function Record() {
                         className={`object-contain ${item.hasBg ? "w-6 h-6" : "w-full h-full"}`}
                       />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-[16px] font-bold text-[#1c1b22]">
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-[16px] font-bold text-[#1c1b22] truncate">
                         {item.amount}
                       </span>
-                      <span className="text-[13px] text-[#8b899a]">
+                      <span className="text-[13px] text-[#8b899a] truncate">
                         {item.title}
                       </span>
                     </div>
@@ -163,7 +162,7 @@ export default function Record() {
 
                   <button
                     onClick={() => handleDelete(groupIndex, item.id)}
-                    className="text-[#8b899a] hover:text-red-500 p-2 transition-colors"
+                    className="text-[#8b899a] hover:text-red-500 p-2 transition-colors shrink-0"
                     aria-label="삭제"
                   >
                     <svg
