@@ -1,5 +1,5 @@
 // 상단바: 출석 스트릭(별) + 알림 벨
-function TopBar({ streakDays, streakMax, onBellClick }) {
+function TopBar({ streakDays, streakMax, onBellClick, hasAlert = false }) {
   const stars = Array.from({ length: streakMax }, (_, i) => i < streakDays)
 
   return (
@@ -11,7 +11,7 @@ function TopBar({ streakDays, streakMax, onBellClick }) {
           </li>
         ))}
       </ul>
-      <button type="button" className="bell" onClick={onBellClick} aria-label="알림">
+      <button type="button" className="bell" onClick={onBellClick} aria-label={hasAlert ? '알림 (새 소식 있음)' : '알림'}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <path
             d="M12 3a6 6 0 0 0-6 6c0 4.2-1.2 5.9-2 7h16c-.8-1.1-2-2.8-2-7a6 6 0 0 0-6-6Z"
@@ -21,6 +21,7 @@ function TopBar({ streakDays, streakMax, onBellClick }) {
           />
           <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
+        {hasAlert && <span className="bell-dot" aria-hidden="true" />}
       </button>
     </header>
   )

@@ -56,11 +56,23 @@
 }
 
 .bell {
+  position: relative;
   background: none;
   border: none;
   padding: 4px;
   color: var(--text);
   display: flex;
+}
+
+.bell-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  border: 1.5px solid var(--bg-app);
 }
 
 /* ---------- 오늘의 소비예보 카드 ---------- */
@@ -259,56 +271,295 @@
   max-width: 280px;
 }
 
-/* ---------- 마이페이지 ---------- */
-.my-page h1 {
-  font-size: 20px;
+/* ---------- 뒤로가기 있는 화면 공통 헤더 ---------- */
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-head h1 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  margin-left: -4px;
+  color: var(--text);
+  display: flex;
+}
+
+/* ---------- 알림 화면 ---------- */
+.alert-card {
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: var(--accent-soft);
+}
+
+.alert-card.warn {
+  background: #fff4e5;
+}
+
+.alert-card.danger {
+  background: #ffe9e9;
+}
+
+.alert-title {
+  font-size: 14px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
-.account-link-card {
+.alert-card.warn .alert-title {
+  color: #b3670c;
+}
+
+.alert-card.danger .alert-title {
+  color: var(--danger);
+}
+
+.alert-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 145%;
+}
+
+.notif-section h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.notif-empty {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notif-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
   border: 1.5px solid var(--border-soft);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 12px 14px;
 }
 
-.account-link-title {
-  font-size: 15px;
+.notif-item-name {
+  font-size: 14px;
   font-weight: 700;
 }
 
-.account-link-desc {
-  font-size: 12.5px;
+.notif-item-date {
+  font-size: 12px;
   color: var(--text-muted);
   margin-top: 2px;
-  line-height: 140%;
 }
 
-.account-link-btn {
-  flex-shrink: 0;
-  border: none;
+.notif-item-side {
+  text-align: right;
+}
+
+.notif-item-amount {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.notif-badge {
+  display: inline-flex;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--border-soft);
+  color: var(--text-muted);
+}
+
+.notif-badge.soon {
+  background: #ffe9e9;
+  color: var(--danger);
+}
+
+/* ---------- 플랜 세우기 ---------- */
+.plan-setup-screen {
+  gap: 18px;
+}
+
+.plan-title {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.period-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  border: 1.5px solid var(--border-soft);
+  border-radius: 999px;
+  background: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.pill.selected {
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--accent-soft);
+}
+
+.period-suffix {
+  font-size: 18px;
+  font-weight: 800;
+  margin-left: 2px;
+}
+
+.date-input {
+  border: 1.5px solid var(--border-soft);
   border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  width: fit-content;
+}
+
+.period-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.amount-field {
+  margin-top: 12px;
+}
+
+.amount-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.amount-display {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.amount-clear {
+  border: none;
+  background: var(--border-soft);
+  color: var(--text-muted);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.amount-suffix {
+  margin-top: 10px;
+  text-align: right;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.save-btn {
+  margin-top: 24px;
+  border: none;
+  border-radius: 14px;
+  background: var(--text);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 15px;
+}
+
+.save-btn:disabled {
+  background: var(--border-soft);
+  color: var(--text-muted);
+}
+
+/* 기간+금액 입력 화면의 "다음" 버튼: 넘패드 바로 위, 목업의 파란 바 자리 */
+.next-btn {
+  margin-top: 20px;
+  border: none;
+  border-radius: 14px;
   background: var(--accent);
   color: #fff;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  padding: 10px 14px;
+  padding: 15px;
 }
 
-.account-link-btn:disabled {
-  opacity: 0.7;
-  cursor: default;
-}
-
-.account-link-btn.done {
-  background: #18a558;
-}
-
-.my-page-note {
-  font-size: 12.5px;
+.next-btn:disabled {
+  background: var(--border-soft);
   color: var(--text-muted);
+}
+
+/* ---------- 커스텀 숫자 키패드 ---------- */
+.number-pad {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.pad-key {
+  border: none;
+  background: none;
+  border-radius: 12px;
+  padding: 16px 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pad-key:active {
+  background: var(--border-soft);
+}
+
+.pad-key-empty {
+  pointer-events: none;
+}
+
+.pad-key-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+/* ---------- 플랜 세우기: 확인 화면 (캐릭터가 하루 예산 알려줌) ---------- */
+.plan-confirm-card {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.plan-confirm-card .speech-bubble {
+  max-width: 300px;
 }
