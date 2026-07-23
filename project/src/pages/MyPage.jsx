@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// 아이콘 임포트 (회원탈퇴 아이콘을 smile로 변경)
+// 아이콘 임포트
 import personIcon from "../assets/person.svg";
 import VectorIcon from "../assets/Vector.svg";
 import LifeIcon from "../assets/Life.svg";
@@ -12,7 +12,7 @@ import checkIcon from "../assets/check.svg";
 import lockIcon from "../assets/lock.svg";
 import contactIcon from "../assets/contact.svg";
 import logoutIcon from "../assets/logout.svg";
-import smileIcon from "../assets/smile.png"; // 확장자가 png라면 .png, svg라면 .svg로 확인해주세요!
+import smileIcon from "../assets/smile.png";
 
 export default function MyPage() {
   const section1 = [
@@ -117,12 +117,12 @@ export default function MyPage() {
           <div className="w-[30px] h-[30px] flex items-center justify-center text-gray-500 text-sm">
             {icon}
           </div>
-          <span className="text-[15px] text-[#333333] font-medium">
+          <span className="text-[15px] text-[#333333] font-medium break-keep">
             {title}
           </span>
         </div>
         <svg
-          className="w-4 h-4 text-[#cccccc]"
+          className="w-4 h-4 text-[#cccccc] shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -139,10 +139,10 @@ export default function MyPage() {
   }
 
   return (
-    <div className="w-full max-w-[430px] bg-white mx-auto relative border-x border-gray-100 overflow-hidden pb-20">
-      <header className="px-5 pt-12 pb-5 flex items-end justify-between border-b border-[#f0f0f0]">
+    <div className="w-full max-w-md bg-white mx-auto relative border-x border-gray-100 overflow-x-hidden pb-24 box-border">
+      <header className="px-5 pt-12 pb-5 flex items-end justify-between border-b border-[#f0f0f0] w-full box-border">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-warn text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-warn text-white shrink-0">
             <svg
               width="18"
               height="18"
@@ -154,24 +154,24 @@ export default function MyPage() {
               <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7Z" />
             </svg>
           </div>
-          <h1 className="text-[22px] font-bold text-black tracking-tight">
+          <h1 className="text-[22px] font-bold text-black tracking-tight break-keep">
             김거지
           </h1>
         </div>
-        <button className="text-[13px] text-[#b3b3b3] font-medium hover:text-gray-600 transition-colors">
+        <button className="text-[13px] text-[#b3b3b3] font-medium hover:text-gray-600 transition-colors shrink-0">
           고객센터
         </button>
       </header>
 
-      <main className="flex flex-col">
-        <div className="py-2">
+      <main className="flex flex-col w-full">
+        <div className="py-2 w-full">
           {section1.map((item, idx) =>
             item.title === "생활비 설정" ? (
               <Link key={idx} to="/plan" className={rowClass}>
                 <Row title={item.title} icon={item.icon} />
               </Link>
             ) : (
-              <button key={idx} className={rowClass}>
+              <button key={idx} type="button" className={rowClass}>
                 <Row title={item.title} icon={item.icon} />
               </button>
             ),
@@ -180,9 +180,9 @@ export default function MyPage() {
 
         <div className="h-px bg-[#f0f0f0] mx-5" />
 
-        <div className="py-2">
+        <div className="py-2 w-full">
           {section2.map((item, idx) => (
-            <button key={idx} className={rowClass}>
+            <button key={idx} type="button" className={rowClass}>
               <Row title={item.title} icon={item.icon} />
             </button>
           ))}
@@ -190,8 +190,8 @@ export default function MyPage() {
 
         <div className="h-px bg-[#f0f0f0] mx-5" />
 
-        <div className="py-2 flex flex-col">
-          <button className={rowClass}>
+        <div className="py-2 flex flex-col w-full">
+          <button type="button" className={rowClass}>
             <Row
               title="로그아웃"
               icon={
@@ -203,7 +203,7 @@ export default function MyPage() {
               }
             />
           </button>
-          <button className={rowClass}>
+          <button type="button" className={rowClass}>
             <Row
               title="회원탈퇴"
               icon={
