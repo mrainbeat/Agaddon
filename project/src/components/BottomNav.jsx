@@ -1,47 +1,18 @@
 import { NavLink } from 'react-router-dom'
-
-const ACTIVE_CLASS = 'text-warn'
+import homeColor from '../assets/home_color.png'
+import homeGray from '../assets/home_gray.png'
+import friendColor from '../assets/friend_color.png'
+import friendGray from '../assets/friend_gray.png'
+import recordColor from '../assets/record_color.png'
+import recordGray from '../assets/record_gray.png'
+import myColor from '../assets/my_color.png'
+import myGray from '../assets/my_gray.png'
 
 const TABS = [
-  {
-    to: '/',
-    label: '홈',
-    icon: (
-      <path d="M4 11.5 12 5l8 6.5M6 10v9h12v-9" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    ),
-  },
-  {
-    to: '/friends',
-    label: '친구',
-    icon: (
-      <>
-        <circle cx="9" cy="8.5" r="3.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M3.5 19c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx="17" cy="9" r="2.4" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M15.2 13.7c2.4.2 4.3 2.1 4.3 4.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </>
-    ),
-  },
-  {
-    to: '/records',
-    label: '기록',
-    icon: (
-      <>
-        <rect x="5" y="4" width="14" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </>
-    ),
-  },
-  {
-    to: '/my',
-    label: '마이',
-    icon: (
-      <>
-        <circle cx="12" cy="8" r="3.3" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M5 19.5c0-3.9 3.1-6.2 7-6.2s7 2.3 7 6.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </>
-    ),
-  },
+  { to: '/', label: '홈', color: homeColor, gray: homeGray },
+  { to: '/friends', label: '친구', color: friendColor, gray: friendGray },
+  { to: '/records', label: '기록', color: recordColor, gray: recordGray },
+  { to: '/my', label: '마이', color: myColor, gray: myGray },
 ]
 
 function BottomNav() {
@@ -57,14 +28,16 @@ function BottomNav() {
           end={tab.to === '/'}
           className={({ isActive }) =>
             `flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 text-[11px] font-semibold no-underline ${
-              isActive ? ACTIVE_CLASS : 'text-ink-muted'
+              isActive ? 'text-warn' : 'text-ink-muted'
             }`
           }
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            {tab.icon}
-          </svg>
-          <span>{tab.label}</span>
+          {({ isActive }) => (
+            <>
+              <img src={isActive ? tab.color : tab.gray} alt="" width={22} height={22} aria-hidden="true" />
+              <span>{tab.label}</span>
+            </>
+          )}
         </NavLink>
       ))}
     </nav>

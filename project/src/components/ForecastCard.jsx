@@ -18,9 +18,9 @@ function buildForecastMessage({ nextSub, budget }) {
   if (ratio >= 0.7) {
     const cushion = remaining - safeDays * SURVIVAL_DAILY_AMOUNT
     if (cushion > 0) {
-      return `${formatWon(cushion)} 더 쓰면 하루를 ${SURVIVAL_ITEM_LABEL}(${formatWon(SURVIVAL_DAILY_AMOUNT)})로 버텨야해ㅜ`
+      return `<strong class="text-danger">${formatWon(cushion)}</strong> 더 쓰면 하루를 <strong class="text-danger">${SURVIVAL_ITEM_LABEL}</strong>로 버텨야 해ㅜ`
     }
-    return `지금부터는 하루 ${SURVIVAL_ITEM_LABEL}(${formatWon(SURVIVAL_DAILY_AMOUNT)}) 수준으로만 버틸 수 있어... 오늘은 진짜 아껴줘ㅠㅠ`
+    return `지금부터는 하루 <strong class="text-danger">${SURVIVAL_ITEM_LABEL}(${formatWon(SURVIVAL_DAILY_AMOUNT)})</strong> 수준으로만 버틸 수 있어... 오늘은 진짜 아껴줘ㅠㅠ`
   }
 
   if (nextSub && nextSub.daysLeft <= 3) {
@@ -32,7 +32,7 @@ function buildForecastMessage({ nextSub, budget }) {
 
 function ForecastCard({ nextSub, budget }) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-5 py-2">
+    <div className="flex flex-col items-center gap-5 pt-2 pb-4">
       <div className="relative max-w-[300px] rounded-2xl bg-[#FFE3CC] px-4 py-3 text-center after:absolute after:-bottom-2 after:left-1/2 after:border-8 after:border-transparent after:border-b-0 after:border-t-[#FFE3CC] after:content-[''] after:[transform:translateX(-50%)]">
         <p
           className="text-sm font-semibold leading-relaxed text-ink"

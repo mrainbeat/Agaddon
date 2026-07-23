@@ -86,7 +86,7 @@ function SpendEntry() {
 
   const pillClass = (selected) =>
     `rounded-full border-[1.5px] px-4 py-2 text-sm font-bold ${
-      selected ? 'border-ink bg-accent-soft text-ink' : 'border-line-soft text-ink-muted'
+      selected ? 'border-warn text-warn' : 'border-line-soft text-ink-muted'
     }`
 
   if (step === 'confirm') {
@@ -129,11 +129,12 @@ function SpendEntry() {
 
   return (
     <div className="flex flex-col gap-[18px] px-5 pb-2 pt-5">
-      <header className="flex items-center gap-2">
+      <header className="flex flex-col gap-3 border-b border-line-soft pb-4">
         <BackButton onClick={() => navigate(-1)} />
+        <h1 className="text-lg font-bold">소비 입력</h1>
       </header>
 
-      <h1 className="text-[22px] font-extrabold">방금</h1>
+      <h2 className="text-[22px] font-extrabold">방금</h2>
 
       <div className="flex flex-wrap items-center gap-2">
         {MERCHANT_PRESETS.map((label) => (
@@ -169,30 +170,26 @@ function SpendEntry() {
       <div className="mt-3">
         <div className="flex items-center justify-between border-b-2 border-line pb-2.5">
           <span className="text-[32px] font-extrabold text-ink">{formatAmount(amountDigits)}원</span>
-          {amountDigits && (
-            <button
-              type="button"
-              className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full bg-line-soft text-[15px] leading-none text-ink-muted"
-              onClick={() => setAmountDigits('')}
-              aria-label="지우기"
-            >
-              ×
-            </button>
-          )}
+          <button
+            type="button"
+            className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full bg-line-soft text-[15px] leading-none text-ink-muted"
+            onClick={() => setAmountDigits('')}
+            aria-label="지우기"
+          >
+            ×
+          </button>
         </div>
         <p className="mt-2.5 text-right text-base font-bold text-ink">소비했어요</p>
       </div>
 
-      <button
-        type="button"
-        className="mt-5 rounded-2xl bg-warn py-[15px] text-[15px] font-bold text-white disabled:bg-line-soft disabled:text-ink-muted"
-        disabled={!canProceed}
-        onClick={() => canProceed && setStep('confirm')}
-      >
-        다음
-      </button>
-
-      <NumberPad onDigit={handleDigit} onBackspace={handleBackspace} maxLength={MAX_AMOUNT_DIGITS} />
+      <NumberPad
+        onDigit={handleDigit}
+        onBackspace={handleBackspace}
+        maxLength={MAX_AMOUNT_DIGITS}
+        actionLabel="입력"
+        actionDisabled={!canProceed}
+        onAction={() => canProceed && setStep('confirm')}
+      />
     </div>
   )
 }
