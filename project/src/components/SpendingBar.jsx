@@ -1,12 +1,10 @@
 import { formatWon } from '../lib/store.js'
 
-// 소비 내역 게이지: 이번 달 예산 대비 지출 현황.
-// onAddClick을 넘기면 우측에 "입력" 버튼이 뜨고(홈 화면용), 안 넘기면 게이지만 표시(미리보기용).
 function SpendingBar({ spentAmount, maxAmount, onAddClick }) {
   const ratio = maxAmount > 0 ? Math.min(spentAmount / maxAmount, 1) : 0
   const percent = Math.round(ratio * 100)
   const isOver = spentAmount > maxAmount
-  const isNearLimit = !isOver && ratio >= 0.85
+  const remaining = maxAmount - spentAmount
 
   return (
     <section className="flex flex-col gap-2.5" aria-label="소비 내역">
@@ -15,7 +13,7 @@ function SpendingBar({ spentAmount, maxAmount, onAddClick }) {
         {onAddClick ? (
           <button
             type="button"
-            className="rounded-full bg-line-soft px-3 py-1 text-[13px] font-bold text-ink"
+            className="rounded-full bg-warn px-3.5 py-1 text-[13px] font-bold text-white"
             onClick={onAddClick}
           >
             입력
@@ -34,15 +32,15 @@ function SpendingBar({ spentAmount, maxAmount, onAddClick }) {
       >
         <div
           className={`h-full rounded-full transition-[width] duration-400 ease-in-out ${
-            isOver ? 'bg-danger' : isNearLimit ? 'bg-warn' : 'bg-ink'
+            isOver ? 'bg-danger' : 'bg-gradient-to-r from-warn to-danger'
           }`}
           style={{ width: `${Math.max(percent, 4)}%` }}
         />
       </div>
 
       <div className="flex justify-between text-[13px] font-semibold">
-        <span>{formatWon(spentAmount)}</span>
-        <span className="font-medium text-ink-muted">최대 {formatWon(maxAmount)}</span>
+        <span>{formatWon(spentAmount)} 사용</span>
+        <span className="font-medium text-ink-muted">{formatWon(remaining)} 남음</span>
       </div>
     </section>
   )

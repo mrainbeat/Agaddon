@@ -1,7 +1,5 @@
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'back']
 
-// 예산 금액 입력용 커스텀 숫자 키패드.
-// 네이티브 모바일 키보드 대신 화면 안에서 직접 그려서 디자인과 동일하게 맞춘다.
 function NumberPad({ onDigit, onBackspace, maxLength = 10 }) {
   return (
     <div className="mt-2 grid grid-cols-3 gap-1">

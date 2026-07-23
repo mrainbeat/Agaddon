@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* 팀에서 쓰던 색/폰트 토큰을 Tailwind v4 theme로 그대로 옮겨서
-   bg-page, bg-surface, text-ink, bg-accent 같은 유틸리티 클래스로 쓸 수 있게 함 */
 @theme {
   --color-page: #f0f0f4;
   --color-surface: #ffffff;

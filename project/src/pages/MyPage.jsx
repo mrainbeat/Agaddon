@@ -47,24 +47,27 @@ export default function MyPage() {
   }
 
   return (
-    // min-h-svh 제거 -> 화면 전체를 무조건 채우지 않고 컨텐츠 크기에 맞춤
     <div className="w-full max-w-[430px] bg-white mx-auto relative border-x border-gray-100 overflow-hidden pb-2">
-      {/* 1. 상단 헤더 */}
       <header className="px-5 pt-12 pb-5 flex items-end justify-between border-b border-[#f0f0f0]">
-        <h1 className="text-[22px] font-bold text-black tracking-tight">
-          김거지
-        </h1>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-warn text-white">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7Z" />
+            </svg>
+          </div>
+          <h1 className="text-[22px] font-bold text-black tracking-tight">
+            김거지
+          </h1>
+        </div>
         <button className="text-[13px] text-[#b3b3b3] font-medium hover:text-gray-600 transition-colors">
           고객센터
         </button>
       </header>
 
-      {/* 2. 메인 리스트 영역 */}
       <main className="flex flex-col">
-        {/* 그룹 1 */}
         <div className="py-2">
           {section1.map((title, idx) =>
-            // "생활비 설정" 항목만 플랜세우기(/plan)로 연결
             title === "생활비 설정" ? (
               <Link key={idx} to="/plan" className={rowClass}>
                 <Row title={title} />
@@ -77,10 +80,8 @@ export default function MyPage() {
           )}
         </div>
 
-        {/* 구분선 */}
         <div className="h-px bg-[#f0f0f0] mx-5" />
 
-        {/* 그룹 2 */}
         <div className="py-2">
           {section2.map((title, idx) => (
             <button key={idx} className={rowClass}>
@@ -89,10 +90,8 @@ export default function MyPage() {
           ))}
         </div>
 
-        {/* 구분선 */}
         <div className="h-px bg-[#f0f0f0] mx-5" />
 
-        {/* 그룹 3 (로그아웃) */}
         <div className="pt-2">
           <button className={rowClass}>
             <Row title="로그아웃" />

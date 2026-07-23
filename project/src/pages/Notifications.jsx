@@ -24,7 +24,16 @@ function Notifications() {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    setData(rollPaydayIfPassed(loadData()))
+    let cancelled = false
+    async function load() {
+      const loaded = await loadData()
+      const withPayday = await rollPaydayIfPassed(loaded)
+      if (!cancelled) setData(withPayday)
+    }
+    load()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   if (!data) return null
